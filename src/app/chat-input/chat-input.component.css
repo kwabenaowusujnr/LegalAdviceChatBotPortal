@@ -1,0 +1,4 @@
+/* Chat input specific styles */
+textarea {
+  field-sizing: content;
+}
