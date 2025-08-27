@@ -1,53 +1,61 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - nsembot
+name: Build and deploy Angular app to Azure Web App - nsembot
 
 on:
   push:
     branches:
-      - master
+      - master   # change if using "main"
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
+          node-version: '18.x' # Angular CLI supports 18 (22.x may break)
 
-      - name: npm install, build, and test
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests in headless mode
         run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          npm run test -- --browsers=ChromeHeadless --watch=false
+        env:
+          CHROME_BIN: google-chrome-stable
 
-      - name: Upload artifact for deployment job
+      - name: Build Angular app
+        run: npm run build -- --configuration production
+
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: .
+          name: angular-dist
+          path: dist/legal-advice-chat-bot-portal
+          if-no-files-found: error
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download build artifact
         uses: actions/download-artifact@v4
         with:
-          name: node-app
-      
+          name: angular-dist
+          path: dist/legal-advice-chat-bot-portal
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -55,11 +63,9 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_0C9A74520B9349DA84DEBC4CA726ED24 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8C4A11844F4A4F01A73E00AA4EC42DBA }}
 
-      - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'nsembot'
           slot-name: 'Production'
-          package: .
-          
+          package: dist/legal-advice-chat-bot-portal
