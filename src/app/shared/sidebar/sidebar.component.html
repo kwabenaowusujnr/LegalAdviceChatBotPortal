@@ -5,7 +5,7 @@
              [class.-translate-x-full]="!isSidebarOpen()"
 >
   <!-- Header -->
-  <div class="p-4 border-b border-gray-200 dark:border-gray-700" >
+  <div class="p-4 border-b border-gray-200 dark:border-gray-700" [class.hidden]="!isSidebarOpen()">
     <div class="flex items-center justify-between gap-2 mb-4" >
       <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-20 h-30"  [class.hidden]="!isSidebarOpen()"/>
 
