@@ -1,4 +1,4 @@
-<div class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6">
+<div class="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
   <div class="max-w-4xl mx-auto">
     <div class="relative flex items-end gap-3 bg-gray-50 dark:bg-gray-700 rounded-2xl p-3">
       <!-- Attachment Button -->
@@ -12,7 +12,7 @@
       </button>
 
       <!-- Text Input -->
-      <textarea [(ngModel)]="messageText" (keypress)="onKeyPress($event)" placeholder="Ask me any legal question..." rows="1"
+      <textarea [(ngModel)]="messageText" (keypress)="onKeyPress($event)" placeholder="Ask me..." rows="1"
         class="flex-1 bg-transparent border-none outline-none resize-none text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 min-h-[24px] max-h-32"
         style="field-sizing: content;"></textarea>
 
@@ -28,7 +28,7 @@
 
       <!-- Send Button -->
       <button (click)="onSubmit()" [disabled]="!messageText.trim()"
-        class="flex-shrink-0 p-2 bg-green-900 dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        class="flex-shrink-0 p-2  bg-green-900 dark:bg-white text-white dark:text-black rounded-lg hover:bg-gray-800 dark:hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
           </path>
@@ -42,3 +42,5 @@
     </p>
   </div>
 </div>
+
+

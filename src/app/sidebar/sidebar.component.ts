@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface ChatHistory {
@@ -23,19 +23,6 @@ interface ChatSection {
 
 export class SidebarComponent {
   searchQuery = ""
-  // State for sidebar visibility
-  isSidebarOpen = signal(true);
-  menuToggle = new EventEmitter<void>();
-
-  constructor() {
-    // Initialize chat sections
-
-    // Set initial sidebar state based on screen width
-    this.isSidebarOpen.set(window.innerWidth >= 768);
-  }
-
-  // State for collapsible sections in the sidebar
-  openSections = signal<Set<string>>(new Set(['Today', 'Previous 7 Days', 'Previous 3 Months']));
 
   chatSections: ChatSection[] = [
     // {
@@ -84,26 +71,15 @@ export class SidebarComponent {
     console.log("Starting new chat...")
   }
 
-  // Toggle sidebar visibility
+  // Add this method to handle menu toggle from header
+  onMenuToggle() {
+    this.toggleSidebar();
+  }
+
   toggleSidebar() {
-    this.isSidebarOpen.update(value => !value);
-  }
-
-  // Check if a sidebar section is open
-  isSectionOpen(sectionTitle: string) {
-    return this.openSections().has(sectionTitle);
-  }
-
-  // Adjust textarea height dynamically based on content
-  adjustTextareaHeight(event: Event) {
-    const textarea = event.target as HTMLTextAreaElement;
-    textarea.style.height = 'auto'; // Reset height to recalculate
-    textarea.style.height = textarea.scrollHeight + 'px'; // Set height to scroll height
-  }
-
-  // Listen for window resize events to adjust sidebar visibility
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    this.isSidebarOpen.set(window.innerWidth >= 768);
+    // Implement your sidebar toggle logic here
+    // For example, toggle a collapsed state
+    // this.collapsed = !this.collapsed;
+    // If you use a signal or other state, update accordingly
   }
 }

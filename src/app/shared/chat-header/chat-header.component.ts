@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-chat-header',
@@ -8,22 +8,24 @@ import { Component } from '@angular/core';
   styleUrl: './chat-header.component.css'
 })
 export class ChatHeaderComponent {
-  isDarkMode = false
+  isDarkMode = false;
+
+  @Output() menuToggle = new EventEmitter<void>();
 
   toggleTheme() {
-    this.isDarkMode = !this.isDarkMode
-    document.documentElement.classList.toggle("dark", this.isDarkMode)
+    this.isDarkMode = !this.isDarkMode;
+    document.documentElement.classList.toggle("dark", this.isDarkMode);
   }
 
   openSettings() {
-    console.log("Opening settings...")
+    console.log("Opening settings...");
   }
 
   openProfile() {
-    console.log("Opening profile...")
+    console.log("Opening profile...");
   }
 
   toggleMenu() {
-    console.log("Toggling menu...")
+    this.menuToggle.emit();
   }
 }

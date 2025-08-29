@@ -1,4 +1,4 @@
-<div class="flex gap-3 mb-6" [class.flex-row-reverse]="message.sender === 'user'">
+<div class="flex gap-3 mb-6 p-6" [class.flex-row-reverse]="message.sender === 'user'">
   <!-- Avatar -->
   <div class="flex-shrink-0">
     <div *ngIf="message.sender === 'user'"
@@ -9,8 +9,9 @@
       </svg>
     </div>
     <div *ngIf="message.sender === 'ai'"
-      class="w-10 h-10 bg-gradient-to-br from-gray-800 to-gray-900 dark:from-gray-100 dark:to-gray-200 rounded-full flex items-center justify-center shadow-lg">
-      <span class="text-white dark:text-gray-800 font-bold text-sm">AI</span>
+      class="w-10 h-10 bg-gradient-to-br from-[#ffa978] to-amber-900 border-t-orange-600 dark:from-gray-100 dark:to-gray-200 rounded-full flex items-center justify-center shadow-lg">
+      <!-- <span class="text-white dark:text-gray-800 font-bold text-sm">AI</span> -->
+      <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-5 h-5" />
     </div>
   </div>
 
@@ -24,9 +25,9 @@
 
       <!-- Message header with sender and timestamp -->
       <div class="flex items-center gap-2 mb-2" [class.flex-row-reverse]="message.sender === 'user'">
-        <span class="text-xs font-medium"
+        <span class="text-xs font-bold"
           [class]="message.sender === 'user' ? 'text-blue-100' : 'text-gray-600 dark:text-gray-400'">
-          {{ message.sender === 'user' ? 'You' : 'CoreAI' }}
+          {{ message.sender === 'user' ? 'You' : 'NsemBot' }}
         </span>
         <span class="text-xs"
           [class]="message.sender === 'user' ? 'text-blue-200' : 'text-gray-500 dark:text-gray-500'">
