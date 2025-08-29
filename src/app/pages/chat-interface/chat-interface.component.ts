@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SidebarComponent } from "../sidebar/sidebar.component";
-import { ChatAreaComponent } from "../chat-area/chat-area.component";
+import { SidebarComponent } from "../../shared/sidebar/sidebar.component";
+import { ChatAreaComponent } from "../../shared/chat-area/chat-area.component";
 
 @Component({
   selector: 'app-chat-interface',

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Message } from '../core/models/Message';
+import { Message } from '../../core/models/Message';
 import { CommonModule } from '@angular/common';
 
 @Component({
