@@ -1,0 +1,82 @@
+<aside class="w-64 sm:w-72 h-full bg-gray-50 border-r border-gray-200 flex flex-col">
+   <!-- Header  -->
+  <div class="p-3 sm:p-4 border-b border-gray-200">
+    <div class="flex items-center justify-between mb-3 sm:mb-4">
+      <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+        <!-- <lucide-icon [img]="menuIcon" class="w-5 h-5 text-gray-600"></lucide-icon> -->
+      </button>
+      <div class="flex items-center space-x-2">
+        <!-- <h1 class="text-base sm:text-lg font-semibold text-gray-900">NsemBot</h1>
+        <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">2.5 Flash</span> -->
+        <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-20 h-30"/>
+      </div>
+      <button 
+        class="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
+        (click)="onCloseSidebar()"
+      >
+        <lucide-icon [img]="closeIcon" class="w-5 h-5 text-gray-600"></lucide-icon>
+      </button>
+      <button  class="hidden lg:block p-2 hover:bg-gray-100 rounded-lg transition-colors">
+        <lucide-icon *ngIf="!isExpanded" [img]="plusIcon" class="w-5 h-5 text-gray-600"></lucide-icon>
+      </button>
+    </div>
+    
+     <!-- New Chat Button  -->
+    <button class="w-full flex items-center space-x-3 p-2.5 sm:p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+      <lucide-icon [img]="messageIcon" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-600"></lucide-icon>
+      <span class="text-sm sm:text-base text-gray-700 font-medium">New chat</span>
+    </button>
+  </div>
+
+   <!-- Navigation Content  -->
+  <div class="flex-1 overflow-y-auto">
+    <div class="p-3 sm:p-4 space-y-4 sm:space-y-6">
+       <!-- Navigation Sections  -->
+      <div *ngFor="let section of navigationSections" class="space-y-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wide">
+            {{ section.title }}
+          </h3>
+          <button 
+            *ngIf="section.isCollapsible"
+            (click)="toggleSection(section)"
+            class="p-1 hover:bg-gray-100 rounded transition-colors"
+          >
+            <lucide-icon 
+              [img]="chevronIcon" 
+              class="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 transition-transform"
+              [class.rotate-180]="!section.isExpanded"
+            ></lucide-icon>
+          </button>
+        </div>
+        
+        <div *ngIf="!section.isCollapsible || section.isExpanded" class="space-y-1">
+          <button
+            *ngFor="let item of section.items"
+            class="w-full flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors group"
+            [class.bg-blue-50]="item.isActive"
+            [class.text-blue-700]="item.isActive"
+            [class.text-gray-700]="!item.isActive"
+          >
+            <lucide-icon 
+              *ngIf="item.icon" 
+              [img]="item.icon" 
+              class="w-3 sm:w-4 h-3 sm:h-4 flex-shrink-0"
+              [class.text-blue-600]="item.isActive"
+              [class.text-gray-500]="!item.isActive"
+            ></lucide-icon>
+            <span class="text-xs sm:text-sm font-medium truncate">{{ item.label }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+   <!-- Footer  -->
+  <div class="p-3 sm:p-4 border-t border-gray-200">
+    <button class="w-full flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors text-gray-700">
+      <lucide-icon [img]="settingsIcon" class="w-3 sm:w-4 h-3 sm:h-4 text-gray-500"></lucide-icon>
+      <span class="text-xs sm:text-sm font-medium">Settings & help</span>
+    </button>
+  </div>
+</aside>

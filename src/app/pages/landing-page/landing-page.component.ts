@@ -11,6 +11,6 @@ export class LandingPageComponent {
   constructor(private router: Router) {}
 
   startChat() {
-    this.router.navigate(['/chat']);
+    this.router.navigate(['/chatV2']);
   }
 }

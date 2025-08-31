@@ -1,0 +1,36 @@
+<div class="flex space-x-2 sm:space-x-4" [class.flex-row-reverse]="message.sender === 'user'" [class.space-x-reverse]="message.sender === 'user'">
+   <!-- Avatar  -->
+  <div class="flex-shrink-0">
+    <div 
+      class="w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center"
+      [class.bg-blue-600]="message.sender === 'bot'"
+      [class.bg-gray-600]="message.sender === 'user'"
+    >
+      <lucide-icon 
+        [img]="message.sender === 'bot' ? botIcon : userIcon" 
+        class="w-3 h-3 sm:w-4 sm:h-4 text-white"
+      ></lucide-icon>
+    </div>
+  </div>
+
+   <!-- Message Content  -->
+  <div class="flex-1 max-w-xs sm:max-w-md lg:max-w-3xl">
+    <div 
+      class="rounded-2xl px-3 py-2 sm:px-4 sm:py-3 text-sm leading-relaxed"
+      [class.bg-blue-600]="message.sender === 'user'"
+      [class.text-white]="message.sender === 'user'"
+      [class.bg-gray-100]="message.sender === 'bot'"
+      [class.text-gray-900]="message.sender === 'bot'"
+    >
+      <p class="whitespace-pre-wrap break-words">{{ message.content }}</p>
+    </div>
+    
+     <!-- Timestamp  -->
+    <div 
+      class="mt-1 text-xs text-gray-500"
+      [class.text-right]="message.sender === 'user'"
+    >
+      {{ formatTimestamp(message.timestamp) }}
+    </div>
+  </div>
+</div>
