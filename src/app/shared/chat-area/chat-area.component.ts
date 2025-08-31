@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ChatHeaderComponent } from "../chat-header/chat-header.component";
-import { ChatInputComponent } from "../chat-input/chat-input.component";
+import { ChatInputV2Component } from "../chat-input-v2/chat-input-v2.component";
 import { MessageWindowComponent } from "../message-window/message-window.component";
 import { Message } from '../../core/models/Message';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-chat-area',
-  imports: [ChatHeaderComponent, ChatInputComponent, MessageWindowComponent, CommonModule],
+  imports: [ChatHeaderComponent, ChatInputV2Component, MessageWindowComponent, CommonModule],
   templateUrl: './chat-area.component.html',
   styleUrl: './chat-area.component.css'
 })

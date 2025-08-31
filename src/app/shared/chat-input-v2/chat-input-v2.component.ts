@@ -5,10 +5,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 @Component({
   selector: 'app-chat-input',
   imports: [CommonModule, FormsModule],
-  templateUrl: './chat-input.component.html',
-  styleUrl: './chat-input.component.css'
+  templateUrl: './chat-input-v2.component.html',
+  styleUrl: './chat-input-v2.component.css'
 })
-export class ChatInputComponent {
+export class ChatInputV2Component {
   @Output() messageSubmitted = new EventEmitter<string>()
 
   messageText = ""

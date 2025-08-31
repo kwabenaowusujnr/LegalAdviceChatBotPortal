@@ -40,4 +40,19 @@ export class ChatInputComponent {
       this.inputValue = ""
     }
   }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault()
+      this.onSubmit()
+    }
+  }
+
+  onAttachment() {
+    console.log("Opening file attachment...")
+  }
+
+  onVoiceInput() {
+    console.log("Starting voice input...")
+  }
 }

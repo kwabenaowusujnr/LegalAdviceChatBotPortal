@@ -11,7 +11,7 @@ import { MessageWindowComponent } from "src/app/shared/message-window/message-wi
 
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule, SidebarV2Component, ChatMessageComponent, ChatInputComponent, LucideAngularModule, SidebarV2Component, MessageWindowComponent],
+  imports: [CommonModule, SidebarV2Component, ChatInputComponent, LucideAngularModule, SidebarV2Component, MessageWindowComponent],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
@@ -61,9 +61,9 @@ export class ChatComponent {
 */
 
   messages: Message[] = [
-  
+
     ];
-  
+
     onSendMessage(content: string) {
       const newMessage: Message = {
         id: Date.now().toString(),
@@ -71,9 +71,9 @@ export class ChatComponent {
         content,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       }
-  
+
       this.messages.push(newMessage)
-  
+
       // Simulate AI response
       setTimeout(() => {
         const aiResponse: Message = {
