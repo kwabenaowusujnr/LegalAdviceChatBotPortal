@@ -10,7 +10,7 @@
         <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded-full">2.5 Flash</span> -->
         <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-20 h-30"/>
       </div>
-      <button 
+      <button
         class="p-2 hover:bg-gray-100 rounded-lg transition-colors lg:hidden"
         (click)="onCloseSidebar()"
       >
@@ -20,7 +20,7 @@
         <lucide-icon *ngIf="!isExpanded" [img]="plusIcon" class="w-5 h-5 text-gray-600"></lucide-icon>
       </button>
     </div>
-    
+
      <!-- New Chat Button  -->
     <button class="w-full flex items-center space-x-3 p-2.5 sm:p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
       <lucide-icon [img]="messageIcon" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-600"></lucide-icon>
@@ -37,19 +37,19 @@
           <h3 class="text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wide">
             {{ section.title }}
           </h3>
-          <button 
+          <!-- <button
             *ngIf="section.isCollapsible"
             (click)="toggleSection(section)"
             class="p-1 hover:bg-gray-100 rounded transition-colors"
           >
-            <lucide-icon 
-              [img]="chevronIcon" 
+            <lucide-icon
+              [img]="chevronIcon"
               class="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 transition-transform"
               [class.rotate-180]="!section.isExpanded"
             ></lucide-icon>
-          </button>
+          </button> -->
         </div>
-        
+
         <div *ngIf="!section.isCollapsible || section.isExpanded" class="space-y-1">
           <button
             *ngFor="let item of section.items"
@@ -58,9 +58,9 @@
             [class.text-blue-700]="item.isActive"
             [class.text-gray-700]="!item.isActive"
           >
-            <lucide-icon 
-              *ngIf="item.icon" 
-              [img]="item.icon" 
+            <lucide-icon
+              *ngIf="item.icon"
+              [img]="item.icon"
               class="w-3 sm:w-4 h-3 sm:h-4 flex-shrink-0"
               [class.text-blue-600]="item.isActive"
               [class.text-gray-500]="!item.isActive"
