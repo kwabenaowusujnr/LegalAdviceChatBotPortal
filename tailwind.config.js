@@ -1,30 +1,35 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["src/**/*.{html,ts}", "app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "*.{js,ts,jsx,tsx,mdx}"],
+  content: [
+    "src/**/*.{html,ts}",
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
         amber: {
-          DEFAULT: '#FEC628', // Amber Yellow – heritage, pride
+          DEFAULT: "#FEC628", // Amber Yellow – heritage, pride
         },
         forest: {
-          DEFAULT: '#228B22', // Forest Green – renewal, stability
+          DEFAULT: "#228B22", // Forest Green – renewal, stability
         },
         royal: {
-          DEFAULT: '#6A0DAD', // Royal Purple – dignity, wisdom
+          DEFAULT: "#6A0DAD", // Royal Purple – dignity, wisdom
         },
         deepred: {
-          DEFAULT: '#8B0000', // Deep Red – resilience & sacrifice
+          DEFAULT: "#8B0000", // Deep Red – resilience & sacrifice
         },
         sand: {
-          DEFAULT: '#F4E1C1', // Neutral Sand – background contrast
+          DEFAULT: "#F4E1C1", // Neutral Sand – background contrast
         },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // background: "hsl(var(--background))",
+        // foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -57,25 +62,8 @@ module.exports = {
         "chat-bg": "#f8f9fa",
         "sidebar-bg": "#ffffff",
         "message-bg": "#f1f3f4",
-      background: "hsl(var(--background))",
+        background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        card: "hsl(var(--card))",
-        "card-foreground": "hsl(var(--card-foreground))",
-        popover: "hsl(var(--popover))",
-        "popover-foreground": "hsl(var(--popover-foreground))",
-        primary: "hsl(var(--primary))",
-        "primary-foreground": "hsl(var(--primary-foreground))",
-        secondary: "hsl(var(--secondary))",
-        "secondary-foreground": "hsl(var(--secondary-foreground))",
-        muted: "hsl(var(--muted))",
-        "muted-foreground": "hsl(var(--muted-foreground))",
-        accent: "hsl(var(--accent))",
-        "accent-foreground": "hsl(var(--accent-foreground))",
-        destructive: "hsl(var(--destructive))",
-        "destructive-foreground": "hsl(var(--destructive-foreground))",
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
       },
       borderRadius: {
         lg: "var(--radius)",

@@ -8,7 +8,7 @@
 
    <!-- Sidebar with responsive behavior  -->
   <div
-    class="fixed lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out z-50"
+    class="fixed lg:relative lg:translate-x-0 transition-transform duration-300 ease-in-out z-50 h-screen lg:h-auto"
     [class.-translate-x-full]="!isSidebarOpen"
     [class.translate-x-0]="isSidebarOpen"
   >
@@ -28,7 +28,29 @@
             <lucide-icon [img]="menuIcon" class="w-5 h-5 text-gray-600"></lucide-icon>
           </button>
           <h2 class="text-lg sm:text-xl font-semibold text-gray-900">NsemBot</h2>
-          <span class="hidden sm:inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">2.5 Flash</span>
+          <!-- <span class="hidden sm:inline-block px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">2.5 Flash</span> -->
+
+          <div class="relative dropdown-container">
+            <button (click)="toggleDropdown()"
+              class="flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs text-forest hover:bg-blue-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1">
+              <span>{{ selectedDocument?.name || 'Select Document' }}</span>
+              <lucide-icon [img]="ChevronDown" class="h-3 w-3 transition-transform duration-200"
+                [class.rotate-180]="isDropdownOpen"></lucide-icon>
+            </button>
+
+            <!-- Dropdown Menu -->
+            <div *ngIf="isDropdownOpen"
+              class="absolute top-full left-0 mt-1 w-80 bg-white border border-gray-200 rounded-lg shadow-lg dropdown-menu dropdown-enter">
+              <div class="py-2 max-h-64 overflow-y-auto">
+                <div *ngFor="let document of constitutionalDocuments" (click)="selectDocument(document)"
+                  class="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                  [class.bg-blue-50]="selectedDocument?.id === document.id">
+                  <div class="font-medium text-sm text-gray-900">{{ document.name }}</div>
+                  <div class="text-xs text-gray-600 mt-1">{{ document.description }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- <div class="flex items-center space-x-2 sm:space-x-4">
           <button class="px-3 py-2 sm:px-4 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -39,33 +61,6 @@
           </div>
         </div> -->
           <div class="flex items-center gap-3">
-      <!-- Theme Toggle -->
-      <!-- <button (click)="toggleTheme()"
-        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
-        <svg *ngIf="!isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-          </path>
-        </svg>
-        <svg *ngIf="isDarkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-        </svg>
-      </button> -->
-
-
-
-      <!-- Settings -->
-      <!-- <button (click)="openSettings()"
-        class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-          </path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-          </path>
-        </svg>
-      </button> -->
 
       <!-- Profile -->
       <button (click)="openProfile()" class="relative p-1">
@@ -88,20 +83,47 @@
        <!-- Messages Container  -->
       <div class="flex-1 overflow-y-auto">
          <!-- Welcome State  -->
-        <div *ngIf="messages.length === 0" class="flex items-center justify-center h-full">
+        <!-- <div *ngIf="messages.length === 0" class="flex items-center justify-center h-full">
           <div class="text-center max-w-2xl mx-auto px-4 sm:px-6">
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-blue-600 mb-6 sm:mb-8 text-balance">Hello, KhrossGh</h1>
             <p class="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">How can I help you today?</p>
+          </div>
+        </div> -->
+
+        <div *ngIf="messages.length === 0" class="flex min-h-0 items-start justify-center p-4 sm:p-6 pt-8 sm:pt-12">
+          <div class="text-center max-w-4xl w-full">
+            <!-- Welcome Header -->
+            <div class="mb-8">
+              <div class="flex justify-center mb-4">
+                <img src="assets/images/logo-cp.png" alt="NsemBot Logo" class="w-20 h-20" />
+              </div>
+              <h2 class="text-3xl font-semibold text-gray-900 mb-2">Welcome to NsemBot</h2>
+              <p class="text-gray-600 text-lg">Your AI legal advisor ready to help with constitutional law and legal guidance
+              </p>
+            </div>
+
+            <!-- Legal Suggestions Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-5xl mx-auto">
+              <div *ngFor="let suggestion of legalSuggestions" (click)="onSuggestionClick(suggestion)"
+                class="bg-white border border-gray-200 rounded-xl p-6 hover:border-blue-300 hover:shadow-md transition-all duration-200 cursor-pointer group">
+                <div
+                  class="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-lg mb-4 group-hover:bg-blue-100 transition-colors">
+                  <lucide-icon [img]="suggestion.icon" class="h-6 w-6 text-deepred"></lucide-icon>
+                </div>
+                <h3 class="font-semibold text-gray-900 mb-2 text-left">{{ suggestion.title }}</h3>
+                <p class="text-sm text-gray-600 text-left leading-relaxed">{{ suggestion.description }}</p>
+              </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="mt-8 text-sm text-gray-500">
+              <p>Click on any suggestion above to start a conversation, or type your own legal question below.</p>
+            </div>
           </div>
         </div>
 
          <!-- Chat Messages  -->
         <div *ngIf="messages.length > 0" class="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-4 sm:space-y-6">
-          <!-- <app-chat-message
-            *ngFor="let message of messages; trackBy: trackByMessageId"
-            [message]="message"
-          ></app-chat-message> -->
-
           <app-message-window
                 *ngFor="let message of messages"
                 [message]="message"
@@ -111,15 +133,8 @@
 
        <!-- Chat Input  -->
       <div class="border-t border-gray-200 bg-white">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-          <!-- <app-chat-input
-            (messageSubmit)="onSendMessage($event)"
-            [isLoading]="isLoading"
-
-          ></app-chat-input> -->
-
+        <div class="max-w-4xl mx-auto px-2 sm:px-6 py-2 sm:py-4">
             <app-chat-input (messageSubmit)="onSendMessage($event)"></app-chat-input>
-
         </div>
       </div>
     </main>
