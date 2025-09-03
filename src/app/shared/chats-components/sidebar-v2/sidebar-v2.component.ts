@@ -2,6 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from "@angular/common"
 import { LucideAngularModule, Menu, Plus, MessageSquare, Book, Compass, Settings, ChevronDown, X } from "lucide-angular"
 import { NavigationSection } from 'src/app/core/models/Message';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth';
 
 @Component({
   selector: 'app-sidebar-v2',
@@ -23,13 +25,20 @@ export class SidebarV2Component {
   chevronIcon = ChevronDown
   closeIcon = X
 
+  constructor(
+    private router: Router,
+    public authService: AuthService,
+  ){
+
+  }
+
   navigationSections: NavigationSection[] = [
-       {
-      title: "Recent",
-      items: [{ label: "Angular Tailwind AI Chat Portal", isActive: false }],
-      isCollapsible: true,
-      isExpanded: true,
-    },
+    //    {
+    //   title: "Recent",
+    //   items: [{ label: "Angular Tailwind AI Chat Portal", isActive: false }],
+    //   isCollapsible: true,
+    //   isExpanded: true,
+    // },
   ]
 
   onCloseSidebar(): void {
@@ -41,5 +50,11 @@ export class SidebarV2Component {
       section.isExpanded = !section.isExpanded
       this.isExpanded = !this.isExpanded;
     }
+  }
+
+
+  navigateToLogin(): void {
+    this.router.navigate(["/login"])
+    this.closeSidebar.emit() // Close sidebar on mobile after navigation
   }
 }

@@ -7,6 +7,8 @@ import { ChatMessageComponent } from 'src/app/shared/chats-components/chat-messa
 import { SidebarV2Component } from 'src/app/shared/chats-components/sidebar-v2/sidebar-v2.component';
 import { ChatInputComponent } from 'src/app/shared/chats-components/chat-input/chat-input.component';
 import { MessageWindowComponent } from 'src/app/shared/message-window/message-window.component';
+import { UserMenuComponent } from 'src/app/shared/chats-components/user-menu/user-menu.component';
+import { AuthService } from 'src/app/services/auth';
 
 interface ConstitutionalDocument {
   id: string;
@@ -32,6 +34,7 @@ interface LegalSuggestion {
     LucideAngularModule,
     SidebarV2Component,
     MessageWindowComponent,
+    UserMenuComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -40,6 +43,7 @@ export class ChatComponent {
   //messages: ChatMessage[] = []
   isLoading = false;
   isSidebarOpen = false;
+  showUserMenu = false;
 
   // Icons
   menuIcon = Menu;
@@ -50,6 +54,7 @@ export class ChatComponent {
   readonly Shield = Shield
   readonly Gavel = Gavel
   readonly BookOpen = BookOpen
+
 
   isDropdownOpen = false;
   selectedDocument: ConstitutionalDocument | null = null;
@@ -133,8 +138,12 @@ export class ChatComponent {
 
   messages: Message[] = [];
 
-  constructor(){
+  constructor(
+    public authService: AuthService,
+
+  ){
     this.selectedDocument = this.constitutionalDocuments[0];
+    this.showUserMenu = this.authService.isAuthenticated();
   }
 
   onSendMessage(content: string) {

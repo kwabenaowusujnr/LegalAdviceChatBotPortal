@@ -1,0 +1,32 @@
+// Custom animations for the login form
+.animate-pulse-slow {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+// Focus states for better accessibility
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.1);
+}
+
+// Custom checkbox styling
+input[type="checkbox"]:checked {
+  background-color: #6A0DAD;
+  border-color: #6A0DAD;
+}
+
+// Smooth transitions for form elements
+input, button {
+  transition: all 0.2s ease-in-out;
+}
+
+// Loading spinner animation
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

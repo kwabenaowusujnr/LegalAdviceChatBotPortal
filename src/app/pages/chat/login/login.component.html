@@ -1,0 +1,102 @@
+<div class="min-h-screen bg-gradient-to-br from-sand to-sand/10 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <!-- Logo and Header -->
+    <div class="text-center mb-8">
+      <!-- <div class="inline-flex items-center justify-center w-16 h-16 bg-royal rounded-2xl mb-4 shadow-lg">
+        <lucide-angular [img]="BotIcon" class="w-8 h-8 text-white"></lucide-angular>
+      </div> -->
+      <div class="flex justify-center mb-4">
+        <img src="assets/images/logo-cp.png" alt="NsemBot Logo" class="w-20 h-20" />
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome to NsemBot</h1>
+      <p class="text-gray-600">Your AI Legal Advisor</p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <!-- Email Field -->
+        <div class="mb-6">
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+            Email Address
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="MailIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input type="email" id="email" name="email" [(ngModel)]="email" required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your email" [class.border-red-500]="loginForm.submitted && !email" />
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-6">
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+            Password
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="LockIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password"
+              required
+              class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your password" [class.border-red-500]="loginForm.submitted && !password" />
+            <button type="button" (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-royal transition-colors">
+              <lucide-angular [img]="showPassword ? EyeOffIcon : EyeIcon"
+                class="w-5 h-5 text-gray-400 hover:text-royal"></lucide-angular>
+            </button>
+          </div>
+        </div>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="flex items-center justify-between mb-6">
+          <label class="flex items-center">
+            <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe"
+              class="w-4 h-4 text-royal border-gray-300 rounded focus:ring-royal focus:ring-2" />
+            <span class="ml-2 text-sm text-gray-600">Remember me</span>
+          </label>
+          <button type="button" (click)="onForgotPassword()"
+            class="text-sm text-royal hover:text-royal/80 font-medium transition-colors">
+            Forgot password?
+          </button>
+        </div>
+
+        <!-- Login Button -->
+        <button type="submit" [disabled]="isLoading"
+          class="w-full bg-royal hover:bg-royal/90 disabled:bg-royal/50 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center">
+          <span *ngIf="!isLoading">Sign In</span>
+          <div *ngIf="isLoading" class="flex items-center">
+            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+            Signing in...
+          </div>
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="mt-8 mb-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">New to NsemBot?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign Up Link -->
+      <button type="button" (click)="onSignUp()"
+        class="w-full border-2 border-royal text-royal hover:bg-royal hover:text-white font-semibold py-3 px-4 rounded-xl transition-colors">
+        Create Account
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-8 text-sm text-gray-500">
+      <p>By signing in, you agree to our Terms of Service and Privacy Policy</p>
+    </div>
+  </div>
+</div>
