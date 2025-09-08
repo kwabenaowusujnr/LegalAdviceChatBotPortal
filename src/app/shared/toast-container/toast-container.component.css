@@ -1,0 +1,16 @@
+:host {
+  pointer-events: none;
+}
+
+:host > div {
+  pointer-events: auto;
+}
+
+@media (max-width: 640px) {
+  :host > div {
+    top: 1rem;
+    right: 1rem;
+    left: 1rem;
+    max-width: none;
+  }
+}

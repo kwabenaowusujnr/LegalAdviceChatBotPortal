@@ -1,0 +1,30 @@
+<div
+  class="flex items-start gap-3 p-4 rounded-lg border shadow-lg backdrop-blur-sm transition-all duration-300 ease-in-out transform animate-in slide-in-from-right-full"
+  [class]="getTypeClasses()">
+  <!-- Icon -->
+  <div class="flex-shrink-0 mt-0.5">
+    <lucide-angular [img]="getIcon()" class="w-5 h-5"></lucide-angular>
+  </div>
+
+  <!-- Content -->
+  <div class="flex-1 min-w-0">
+    <div *ngIf="toast.title" class="font-semibold text-sm mb-1">
+      {{ toast.title }}
+    </div>
+    <div class="text-sm opacity-90">
+      {{ toast.message }}
+    </div>
+
+    <!-- Action Button -->
+    <button *ngIf="toast.action" (click)="onActionClick()"
+      class="mt-2 text-xs font-medium underline hover:no-underline transition-all duration-200">
+      {{ toast.action.label }}
+    </button>
+  </div>
+
+  <!-- Close Button -->
+  <button (click)="onDismiss()" class="flex-shrink-0 p-1 rounded-md hover:bg-black/10 transition-colors duration-200"
+    aria-label="Dismiss notification">
+    <lucide-angular [img]="X" class="w-4 h-4"></lucide-angular>
+  </button>
+</div>

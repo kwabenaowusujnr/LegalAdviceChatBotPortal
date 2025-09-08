@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Bell, Globe, LucideAngularModule, Moon, Palette, Shield, Sun, User, X } from 'lucide-angular';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-settings-modal',
@@ -51,6 +52,7 @@ export class SettingsModalComponent {
       desktopNotifications: true,
     },
   }
+  constructor(private toastService: ToastService) { }
 
   tabs = [
     { id: "general", label: "General", icon: this.userIcon },
@@ -94,6 +96,7 @@ export class SettingsModalComponent {
   }
 
   onSave(): void {
+    this.toastService.success("Your settings have been saved successfully", "Settings Saved")
     console.log("Settings saved:", this.settings)
     this.closeModal.emit()
   }
@@ -126,6 +129,7 @@ export class SettingsModalComponent {
         desktopNotifications: true,
       },
     }
+    this.toastService.info("Settings have been reset to default values", "Settings Reset")
   }
 
   @HostListener("document:keydown.escape")

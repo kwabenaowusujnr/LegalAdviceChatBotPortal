@@ -3,6 +3,7 @@ import { Component, HostListener } from '@angular/core';
 import { HelpCircle, LogOut, LucideAngularModule, Settings, User } from 'lucide-angular';
 import { SettingsModalComponent } from '../../settings-modal/settings-modal.component';
 import { Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-user-menu',
@@ -20,7 +21,10 @@ export class UserMenuComponent {
   logOutIcon = LogOut
   helpIcon = HelpCircle
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private toastService: ToastService,
+  ) { }
 
   toggleMenu(): void {
     this.isOpen = !this.isOpen
@@ -31,6 +35,7 @@ export class UserMenuComponent {
   }
 
   onProfileClick(): void {
+    this.toastService.info("Profile management coming soon!", "Feature Not Available")
     console.log("Profile clicked")
     this.closeMenu()
   }
@@ -41,6 +46,7 @@ export class UserMenuComponent {
   }
 
   onHelpClick(): void {
+    this.toastService.info("Help documentation coming soon!", "Feature Not Available")
     console.log("Help clicked")
     this.closeMenu()
   }
@@ -51,6 +57,8 @@ export class UserMenuComponent {
     sessionStorage.clear()
 
     this.closeMenu()
+
+    this.toastService.info("Help documentation coming soon!", "Feature Not Available")
     this.router.navigate(["/login"])
   }
 
