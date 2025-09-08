@@ -36,7 +36,7 @@
       </div>
 
       <!-- Message content with improved typography -->
-      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="message.isFromUser ? (message.message || '') : message.response"></div>
+      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="message.isFromUser ? formatMessageContent(message.message || '') : formatMessageContent(message.response || '')"></div>
       </div>
     </div>
 

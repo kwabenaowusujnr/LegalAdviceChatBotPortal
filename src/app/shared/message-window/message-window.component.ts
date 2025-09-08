@@ -22,6 +22,28 @@ export class MessageWindowComponent {
   }
 
   formatContent(content: string): string {
-    return content.replace(/\n/g, "<br>")
+    // Replace double newlines with <br><br> for paragraphs
+    let formatted = content.replace(/\n\n/g, '<br><br>');
+    // Replace single newlines with <br>
+    formatted = formatted.replace(/\n/g, '<br>');
+    // Add <br> before headings only if not already preceded by <br>
+    formatted = formatted.replace(/([^<br>])?(\*\*[^*]+\*\*)/g, function(match, p1, p2) {
+      return (p1 && p1 !== '<br>') ? '<br>' + p2 : p2;
+    });
+    // Remove extra <br> at start if present
+    formatted = formatted.replace(/^<br>/, '');
+    return formatted;
+  }
+
+
+
+    formatMessageContent(content: string): string {
+      if (!content) return content
+
+      const formatted = content
+          .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+          .replace(/^### (.*$)/gm, '<strong class="text-lg font-semibold text-black mb-1 mt-2">$1</strong>')
+        .replace(/\n/g, "<br>")
+    return formatted
   }
 }
