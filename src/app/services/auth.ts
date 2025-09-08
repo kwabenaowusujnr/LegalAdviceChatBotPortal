@@ -104,12 +104,14 @@ export class AuthService {
     );
   }
 
-  logout(): void {
+  logout(): Observable<boolean> {
     localStorage.removeItem('authToken');
     localStorage.removeItem('tokenExpiresAt');
     localStorage.removeItem('user');
     sessionStorage.clear();
     this.isAuthenticatedSubject.next(false);
+
+    return of(true);
   }
 
   isAuthenticated(): boolean {

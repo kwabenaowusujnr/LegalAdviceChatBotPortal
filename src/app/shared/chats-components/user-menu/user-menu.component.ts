@@ -4,6 +4,7 @@ import { HelpCircle, LogOut, LucideAngularModule, Settings, User } from 'lucide-
 import { SettingsModalComponent } from '../../settings-modal/settings-modal.component';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
+import { AuthService } from 'src/app/services/auth';
 
 @Component({
   selector: 'app-user-menu',
@@ -24,6 +25,7 @@ export class UserMenuComponent {
   constructor(
     private router: Router,
     private toastService: ToastService,
+    private authService: AuthService
   ) { }
 
   toggleMenu(): void {
@@ -52,14 +54,13 @@ export class UserMenuComponent {
   }
 
   onSignOutClick(): void {
-    localStorage.removeItem("user")
-    localStorage.removeItem("authToken")
-    sessionStorage.clear()
-
-    this.closeMenu()
-
-    this.toastService.info("Help documentation coming soon!", "Feature Not Available")
-    this.router.navigate(["/login"])
+    this.authService.logout().subscribe(() => {
+      // Handle successful logout
+      this.closeMenu();
+      this.router.navigate(["/login"]);
+    }, (error) => {
+      // Handle logout error
+    });
   }
 
   onCloseSettingsModal(): void {
