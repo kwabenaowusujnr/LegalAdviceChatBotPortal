@@ -129,6 +129,9 @@
                 *ngFor="let message of messages"
                 [message]="message"
                 ></app-message-window>
+
+                <!-- Added typing indicator that shows when AI is responding -->
+                <app-typing-indicator *ngIf="isLoading"></app-typing-indicator>
         </div>
       </div>
 

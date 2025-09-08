@@ -42,7 +42,7 @@ export class MessageWindowComponent {
 
       const formatted = content
           .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-          .replace(/^### (.*$)/gm, '<strong class="text-lg font-semibold text-black mb-1 mt-2">$1</strong>')
+          .replace(/^### (.*$)/gm, '<strong class=" font-semibold text-black mb-1 mt-2">$1</strong>')
         .replace(/\n/g, "<br>")
     return formatted
   }

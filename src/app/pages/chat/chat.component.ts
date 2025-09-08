@@ -12,6 +12,7 @@ import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { ChatMessage } from 'src/app/services/api-client';
+import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing-indicator/typing-indicator.component';
 
 interface ConstitutionalDocument {
   id: string;
@@ -37,7 +38,8 @@ interface LegalSuggestion {
     LucideAngularModule,
     SidebarV2Component,
     MessageWindowComponent,
-    UserMenuComponent
+    UserMenuComponent,
+    TypingIndicatorComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -253,6 +255,6 @@ export class ChatComponent {
   public onNewChat(): void {
     this.messages = [];
     this.selectedDocument = this.constitutionalDocuments[0];
-    this.toastService.success("Started new chat session");
+    // this.toastService.success("Started new chat session");
   }
 }

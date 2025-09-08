@@ -8,10 +8,12 @@
           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
       </svg>
     </div>
-    <div *ngIf="message.isFromUser === false"
+    <!-- <div *ngIf="message.isFromUser === false"
       class="w-10 h-10 bg-gradient-to-br from-[#ffa978] to-amber-900 border-t-orange-600 dark:from-gray-100 dark:to-gray-200 rounded-full flex items-center justify-center shadow-lg">
       <span class="text-white dark:text-gray-800 font-bold text-sm">NB</span>
-      <!-- <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-5 h-5" /> -->
+    </div> -->
+    <div  *ngIf="message.isFromUser === false" class="flex items-center justify-center ">
+      <img src="assets/images/logo-cp.png" alt="NsemBot Logo" class="w-10 h-10" />
     </div>
   </div>
 
