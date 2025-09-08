@@ -13,6 +13,8 @@ import { AuthService } from 'src/app/services/auth';
 })
 export class SidebarV2Component {
 @Output() closeSidebar = new EventEmitter<void>()
+@Output() newChat = new EventEmitter<void>()
+
  isExpanded = true;
 
   // Icons
@@ -55,6 +57,11 @@ export class SidebarV2Component {
 
   navigateToLogin(): void {
     this.router.navigate(["/login"])
+    this.closeSidebar.emit() // Close sidebar on mobile after navigation
+  }
+
+  onNewChat(): void {
+    this.newChat.emit()
     this.closeSidebar.emit() // Close sidebar on mobile after navigation
   }
 }

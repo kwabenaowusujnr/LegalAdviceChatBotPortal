@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Message } from '../../core/models/Message';
 import { CommonModule } from '@angular/common';
+import { ChatMessage } from 'src/app/services/api-client';
 
 @Component({
   selector: 'app-message-window',
@@ -9,13 +10,13 @@ import { CommonModule } from '@angular/common';
   styleUrl: './message-window.component.css'
 })
 export class MessageWindowComponent {
-  @Input() message!: Message
+  @Input() message!: ChatMessage
   @Output() feedbackSelected = new EventEmitter<{ messageId: string; feedback: "good" | "bad" | "custom" }>()
 
 
   onFeedback(feedback: "good" | "bad" | "custom") {
     this.feedbackSelected.emit({
-      messageId: this.message.id,
+      messageId: this.message.id?.toString() || '',
       feedback,
     })
   }

@@ -1,14 +1,17 @@
+import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { BookOpen, ChevronDown, FileText, Gavel, Menu, Scale, Shield, Users } from 'lucide-angular';
 import { LucideAngularModule } from 'lucide-angular';
-import { ChatMessage, Message } from 'src/app/core/models/Message';
 import { ChatMessageComponent } from 'src/app/shared/chats-components/chat-message/chat-message.component';
 import { SidebarV2Component } from 'src/app/shared/chats-components/sidebar-v2/sidebar-v2.component';
 import { ChatInputComponent } from 'src/app/shared/chats-components/chat-input/chat-input.component';
 import { MessageWindowComponent } from 'src/app/shared/message-window/message-window.component';
 import { UserMenuComponent } from 'src/app/shared/chats-components/user-menu/user-menu.component';
 import { AuthService } from 'src/app/services/auth';
+import { Router } from '@angular/router';
+import { ToastService } from 'src/app/services/toast.service';
+import { ChatMessage } from 'src/app/services/api-client';
 
 interface ConstitutionalDocument {
   id: string;
@@ -136,17 +139,61 @@ export class ChatComponent {
     this.isSidebarOpen = false;
   }
 
-  messages: Message[] = [];
+  messages: ChatMessage[] = [];
 
   constructor(
     public authService: AuthService,
-
+    private router: Router,
+    private toastService: ToastService,
+    private chatApiService: ChatApiService
   ){
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
   }
 
-  onSendMessage(content: string) {
+  onSendMessage(message: string): void {
+  const userMessage = new ChatMessage();
+  userMessage.id = Date.now();
+  userMessage.message = message;
+  userMessage.isFromUser = true;
+  userMessage.createdAt = new Date();
+
+    this.messages.push(userMessage);
+
+    this.isLoading = true;
+    console.log("Sending message via API:", message)
+
+    this.chatApiService.sendMessage(message).subscribe({
+      next: (response) => {
+
+        const botMessage = new ChatMessage();
+
+        botMessage.id = Number.parseInt(String(response.id)) || Date.now() + 1;
+        botMessage.response = response.message ? response.message : "No response";
+        botMessage.isFromUser = false;
+        botMessage.createdAt = response.createdAt ? new Date(response.createdAt) : new Date();
+
+        this.messages.push(botMessage);
+        this.isLoading = false;
+
+        if (this.messages.filter((m) => m.isFromUser === false).length === 1) {
+          this.toastService.success("Connected to NsemBot! Ask me anything about legal matters.")
+        }
+      },
+      error: (error) => {
+        console.error("Error sending message:", error);
+        this.isLoading = false;
+
+        const errorMessage = new ChatMessage();
+        errorMessage.id = Date.now() + 1;
+        errorMessage.response = "Sorry, I'm having trouble responding right now. Please try again.";
+        errorMessage.isFromUser = false;
+        errorMessage.createdAt = new Date();
+        this.messages.push(errorMessage)
+      }
+    });
+
+    /*
     const newMessage: Message = {
       id: Date.now().toString(),
       sender: 'user',
@@ -172,6 +219,7 @@ export class ChatComponent {
       };
       this.messages.push(aiResponse);
     }, 1000);
+    */
   }
 
   isDarkMode = false;
@@ -200,5 +248,11 @@ export class ChatComponent {
 
   onSuggestionClick(suggestion: LegalSuggestion): void {
     this.onSendMessage(suggestion.prompt)
+  }
+
+  public onNewChat(): void {
+    this.messages = [];
+    this.selectedDocument = this.constitutionalDocuments[0];
+    this.toastService.success("Started new chat session");
   }
 }

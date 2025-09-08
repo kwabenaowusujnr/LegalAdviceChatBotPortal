@@ -1,14 +1,14 @@
-<div class="flex gap-3 p-4" [class.flex-row-reverse]="message.sender === 'user'">
+<div class="flex gap-3 p-4" [class.flex-row-reverse]="message.isFromUser">
   <!-- Avatar -->
   <div class="flex-shrink-0">
-    <div *ngIf="message.sender === 'user'"
+    <div *ngIf="message.isFromUser"
       class="w-10 h-10 bg-gradient-to-br from-[#228B22] to-[#085308] rounded-full flex items-center justify-center shadow-lg">
       <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
           d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
       </svg>
     </div>
-    <div *ngIf="message.sender === 'ai'"
+    <div *ngIf="message.isFromUser === false"
       class="w-10 h-10 bg-gradient-to-br from-[#ffa978] to-amber-900 border-t-orange-600 dark:from-gray-100 dark:to-gray-200 rounded-full flex items-center justify-center shadow-lg">
       <span class="text-white dark:text-gray-800 font-bold text-sm">NB</span>
       <!-- <img src="assets/images/logo-cp.png" alt="NsemBot" class="w-5 h-5" /> -->
@@ -19,30 +19,30 @@
   <div class="flex-1 max-w-2xl">
     <!-- Added modern message bubble design with proper backgrounds and shadows -->
     <div
-      [class]="message.sender === 'user' ?
+      [class]="message.isFromUser ?
       'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-2xl rounded-tr-md px-4 py-3 shadow-md ml-auto max-w-lg' :
       'bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-2xl rounded-tl-md px-4 py-3 shadow-md border border-gray-200 dark:border-gray-700 max-w-lg'">
 
       <!-- Message header with sender and timestamp -->
-      <div class="flex items-center gap-2 mb-2" [class.flex-row-reverse]="message.sender === 'user'">
+      <div class="flex items-center gap-2 mb-2" [class.flex-row-reverse]="message.isFromUser">
         <span class="text-xs font-bold"
-          [class]="message.sender === 'user' ? 'text-gray-600 dark:text-gray-400' : 'text-gray-600 dark:text-gray-400'">
-          {{ message.sender === 'user' ? 'You' : 'NsemBot' }}
+          [class]="message.isFromUser ? 'text-gray-600 dark:text-gray-400' : 'text-gray-600 dark:text-gray-400'">
+          {{ message.isFromUser ? 'You' : 'NsemBot' }}
         </span>
         <span class="text-xs"
-          [class]="message.sender === 'user' ? 'text-gray-500 dark:text-gray-500' : 'text-gray-500 dark:text-gray-500'">
-          {{ message.timestamp }}
+          [class]="message.isFromUser ? 'text-gray-500 dark:text-gray-500' : 'text-gray-500 dark:text-gray-500'">
+          {{ message.createdAt | date: 'short' }}
         </span>
       </div>
 
       <!-- Message content with improved typography -->
-      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="formatContent(message.content)">
+      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="message.isFromUser ? (message.message || '') : message.response"></div>
       </div>
     </div>
 
     <!-- Improved feedback buttons with better spacing and modern styling -->
-    <div *ngIf="message.sender === 'ai'" class="flex items-center gap-1 mt-3 ml-2">
-      <button (click)="onFeedback('good')"
+    <div *ngIf="message.isFromUser === false" class="flex items-center gap-1 mt-3 ml-2">
+      <!-- <button (click)="onFeedback('good')"
         class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-200 hover:shadow-sm"
         [class.bg-green-50]="message.feedback === 'good'" [class.text-green-700]="message.feedback === 'good'"
         [class.border-green-200]="message.feedback === 'good'"
@@ -54,9 +54,9 @@
           </path>
         </svg>
         Good
-      </button>
+      </button> -->
 
-      <button (click)="onFeedback('bad')"
+      <!-- <button (click)="onFeedback('bad')"
         class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-200 hover:shadow-sm"
         [class.bg-red-50]="message.feedback === 'bad'" [class.text-red-700]="message.feedback === 'bad'"
         [class.border-red-200]="message.feedback === 'bad'" [class.dark:bg-red-900]="message.feedback === 'bad'"
@@ -67,9 +67,9 @@
           </path>
         </svg>
         Bad
-      </button>
+      </button> -->
 
-      <button (click)="onFeedback('custom')"
+      <!-- <button (click)="onFeedback('custom')"
         class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full transition-all duration-200 hover:shadow-sm"
         [class.bg-blue-50]="message.feedback === 'custom'" [class.text-blue-700]="message.feedback === 'custom'"
         [class.border-blue-200]="message.feedback === 'custom'"
@@ -81,7 +81,6 @@
           </path>
         </svg>
         Something like this but...
-      </button>
+      </button> -->
     </div>
   </div>
-</div>

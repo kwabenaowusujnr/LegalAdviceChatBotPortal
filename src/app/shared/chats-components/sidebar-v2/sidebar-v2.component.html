@@ -22,7 +22,7 @@
     </div>
 
      <!-- New Chat Button  -->
-    <button class="w-full flex items-center space-x-3 p-2.5 sm:p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+    <button (click)="onNewChat()" class="w-full flex items-center space-x-3 p-2.5 sm:p-3 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors" >
       <lucide-icon [img]="messageIcon" class="w-4 sm:w-5 h-4 sm:h-5 text-gray-600"></lucide-icon>
       <span class="text-sm sm:text-base text-gray-700 font-medium">New chat</span>
     </button>

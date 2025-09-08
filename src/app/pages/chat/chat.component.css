@@ -13,7 +13,6 @@
   }
 }
 
-// Ensure dropdown appears above other elements
 .dropdown-menu {
   z-index: 1000;
 }
