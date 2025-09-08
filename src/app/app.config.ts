@@ -1,8 +1,24 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
+
 import { routes } from './app.routes';
+import { API_BASE_URL, ServiceProxy } from './services/api-client';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
+  providers: [
+  provideZoneChangeDetection({ eventCoalescing: true }),
+  provideRouter(routes),
+  provideHttpClient(withInterceptorsFromDi()),
+    {
+      provide: API_BASE_URL,
+      useValue: 'https://legalchatbot-api.azurewebsites.net'
+    },
+    {
+      provide: ServiceProxy,
+      useFactory: (http: HttpClient, baseUrl: string) => new ServiceProxy(http, baseUrl),
+      deps: [HttpClient, API_BASE_URL],
+    },
+  ],
 };

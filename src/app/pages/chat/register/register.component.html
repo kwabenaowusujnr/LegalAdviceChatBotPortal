@@ -1,0 +1,189 @@
+<div class="min-h-screen bg-gradient-to-br from-sand to-sand/50 flex items-center justify-center p-4">
+  <div class="w-full max-w-md">
+    <!-- Logo and Header -->
+    <div class="text-center mb-8">
+      <div class="flex justify-center mb-4">
+        <img src="assets/images/logo-cp.png" alt="NsemBot Logo" class="w-20 h-20" />
+      </div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Join NsemBot</h1>
+      <p class="text-gray-600">Create your AI Legal Advisor account</p>
+    </div>
+
+    <!-- Register Form -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        <!-- First Name Field -->
+        <div class="mb-4">
+          <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">
+            First Name *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="UserIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input type="text" id="firstName" name="firstName" [(ngModel)]="firstName" required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your first name" [class.border-red-500]="registerForm.submitted && !firstName" />
+          </div>
+        </div>
+
+        <!-- Last Name Field -->
+        <div class="mb-4">
+          <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">
+            Last Name *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="UserIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input type="text" id="lastName" name="lastName" [(ngModel)]="lastName" required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your last name" [class.border-red-500]="registerForm.submitted && !lastName" />
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="mb-4">
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+            Email Address *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="MailIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input type="email" id="email" name="email" [(ngModel)]="email" required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your email" [class.border-red-500]="registerForm.submitted && !email" />
+          </div>
+        </div>
+
+        <!-- Phone Number Field -->
+        <div [hidden]="true" class="mb-4">
+          <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-2">
+            Phone Number
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="PhoneIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input type="tel" id="phoneNumber" name="phoneNumber" [(ngModel)]="phoneNumber"
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Enter your phone number (optional)" />
+          </div>
+        </div>
+
+        <!-- Region Field -->
+        <div class="mb-4">
+          <label for="region" class="block text-sm font-medium text-gray-700 mb-2">
+            Region *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="GlobeIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <select id="region" name="region" [(ngModel)]="region" required
+              class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors appearance-none bg-white"
+              [class.border-red-500]="registerForm.submitted && !region">
+              <option value="">Select your region</option>
+              <option *ngFor="let regionOption of regions" [value]="regionOption.value">
+                {{ regionOption.label }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-4">
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+            Password *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="LockIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input [type]="showPassword ? 'text' : 'password'" id="password" name="password" [(ngModel)]="password"
+              required
+              class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Create a password" [class.border-red-500]="registerForm.submitted && !password" />
+            <button type="button" (click)="togglePasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-royal transition-colors">
+              <lucide-angular [img]="showPassword ? EyeOffIcon : EyeIcon"
+                class="w-5 h-5 text-gray-400 hover:text-royal"></lucide-angular>
+            </button>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">Password must be at least 6 characters long</p>
+        </div>
+
+        <!-- Confirm Password Field -->
+        <div class="mb-6">
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+            Confirm Password *
+          </label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <lucide-angular [img]="LockIcon" class="w-5 h-5 text-gray-400"></lucide-angular>
+            </div>
+            <input [type]="showConfirmPassword ? 'text' : 'password'" id="confirmPassword" name="confirmPassword"
+              [(ngModel)]="confirmPassword" required
+              class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-royal focus:border-royal transition-colors"
+              placeholder="Confirm your password"
+              [class.border-red-500]="registerForm.submitted && (!confirmPassword || password !== confirmPassword)" />
+            <button type="button" (click)="toggleConfirmPasswordVisibility()"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center hover:text-royal transition-colors">
+              <lucide-angular [img]="showConfirmPassword ? EyeOffIcon : EyeIcon"
+                class="w-5 h-5 text-gray-400 hover:text-royal"></lucide-angular>
+            </button>
+          </div>
+        </div>
+
+        <!-- Terms Agreement -->
+        <div class="mb-6">
+          <label class="flex items-start">
+            <input type="checkbox" [(ngModel)]="agreeToTerms" name="agreeToTerms"
+              class="w-4 h-4 text-royal border-gray-300 rounded focus:ring-royal focus:ring-2 mt-1"
+              [class.border-red-500]="registerForm.submitted && !agreeToTerms" />
+            <span class="ml-2 text-sm text-gray-600">
+              I agree to the
+              <button type="button" class="text-royal hover:text-royal/80 font-medium">Terms of Service</button>
+              and
+              <button type="button" class="text-royal hover:text-royal/80 font-medium">Privacy Policy</button>
+            </span>
+          </label>
+        </div>
+
+        <!-- Register Button -->
+        <button type="submit" [disabled]="isLoading"
+          class="w-full bg-royal hover:bg-royal/90 disabled:bg-royal/50 text-white font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center">
+          <span *ngIf="!isLoading">Create Account</span>
+          <div *ngIf="isLoading" class="flex items-center">
+            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+            Creating account...
+          </div>
+        </button>
+      </form>
+
+      <!-- Divider -->
+      <div class="mt-8 mb-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">Already have an account?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sign In Link -->
+      <button type="button" (click)="onSignIn()"
+        class="w-full border-2 border-royal text-royal hover:bg-royal hover:text-white font-semibold py-3 px-4 rounded-xl transition-colors">
+        Sign In
+      </button>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center mt-8 text-sm text-gray-500">
+      <p>By creating an account, you agree to our Terms of Service and Privacy Policy</p>
+    </div>
+  </div>
+</div>
