@@ -53,13 +53,13 @@ export class ChatApiService {
   }
 
 
-  public sendMessage(message: string, documentContext?: string): Observable<ChatMessage> {
+  public sendMessage(message: string, documentContext?: string, sessionId?: string): Observable<ChatMessage> {
     if (!this.currentSessionId) {
       this.initializeSession()
     }
 
     const chatInput = new ChatMessageInputDto();
-    chatInput.sessionId = this.currentSessionId!;
+    chatInput.sessionId = sessionId || this.currentSessionId!;
     chatInput.message = message;
     chatInput.documentContext = documentContext;
 
@@ -67,7 +67,7 @@ export class ChatApiService {
     console.log(" Sending chat message:", chatInput);
 
     return this.serviceProxy.sendMessage(chatInput).pipe(
-      switchMap(() => this.getLatestBotResponse()),
+      switchMap(() => this.getLatestBotResponse(sessionId || this.currentSessionId!)),
       catchError((error) => {
         console.error(" Error sending message:", error)
         this.toastService.error("Failed to send message. Please try again.")
@@ -80,13 +80,13 @@ export class ChatApiService {
     )
   }
 
-  private getLatestBotResponse(): Observable<ChatMessage> {
-    if (!this.currentSessionId) {
-      throw new Error("No active session")
-    }
+  private getLatestBotResponse(sessionId: string): Observable<ChatMessage> {
+    // if (!this.currentSessionId) {
+    //   throw new Error("No active session")
+    // }
 
 
-    return this.serviceProxy.history(this.currentSessionId).pipe(
+    return this.serviceProxy.history(sessionId).pipe(
       map((response: ChatMessage[]) => {
 
         const botMessages = response.filter((m) => !m.isFromUser)

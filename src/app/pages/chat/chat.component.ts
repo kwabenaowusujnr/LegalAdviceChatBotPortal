@@ -1,7 +1,16 @@
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { BookOpen, ChevronDown, FileText, Gavel, Menu, Scale, Shield, Users } from 'lucide-angular';
+import {
+  BookOpen,
+  ChevronDown,
+  FileText,
+  Gavel,
+  Menu,
+  Scale,
+  Shield,
+  Users,
+} from 'lucide-angular';
 import { LucideAngularModule } from 'lucide-angular';
 import { ChatMessageComponent } from 'src/app/shared/chats-components/chat-message/chat-message.component';
 import { SidebarV2Component } from 'src/app/shared/chats-components/sidebar-v2/sidebar-v2.component';
@@ -20,13 +29,12 @@ interface ConstitutionalDocument {
   description: string;
 }
 
-
 interface LegalSuggestion {
-  id: string
-  title: string
-  description: string
-  icon: any
-  prompt: string
+  id: string;
+  title: string;
+  description: string;
+  icon: any;
+  prompt: string;
 }
 
 @Component({
@@ -39,7 +47,7 @@ interface LegalSuggestion {
     SidebarV2Component,
     MessageWindowComponent,
     UserMenuComponent,
-    TypingIndicatorComponent
+    TypingIndicatorComponent,
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -55,13 +63,12 @@ export class ChatComponent {
   // Icons
   menuIcon = Menu;
   readonly ChevronDown = ChevronDown;
-  readonly Scale = Scale
-  readonly FileText = FileText
-  readonly Users = Users
-  readonly Shield = Shield
-  readonly Gavel = Gavel
-  readonly BookOpen = BookOpen
-
+  readonly Scale = Scale;
+  readonly FileText = FileText;
+  readonly Users = Users;
+  readonly Shield = Shield;
+  readonly Gavel = Gavel;
+  readonly BookOpen = BookOpen;
 
   isDropdownOpen = false;
   selectedDocument: ConstitutionalDocument | null = null;
@@ -92,48 +99,53 @@ export class ChatComponent {
 
   legalSuggestions: LegalSuggestion[] = [
     {
-      id: "1",
-      title: "Contract Review",
-      description: "Analyze contracts and legal documents for key terms and potential issues",
+      id: '1',
+      title: 'Contract Review',
+      description:
+        'Analyze contracts and legal documents for key terms and potential issues',
       icon: this.FileText,
-      prompt: "I need help reviewing a contract. Can you guide me through the key terms I should look for?",
+      prompt:
+        'I need help reviewing a contract. Can you guide me through the key terms I should look for?',
     },
     {
-      id: "2",
-      title: "Constitutional Rights",
-      description: "Understand your constitutional rights and legal protections",
+      id: '2',
+      title: 'Constitutional Rights',
+      description:
+        'Understand your constitutional rights and legal protections',
       icon: this.Scale,
-      prompt: "Can you explain my constitutional rights in this situation?",
+      prompt: 'Can you explain my constitutional rights in this situation?',
     },
     {
-      id: "3",
-      title: "Legal Research",
-      description: "Research case law, statutes, and legal precedents",
+      id: '3',
+      title: 'Legal Research',
+      description: 'Research case law, statutes, and legal precedents',
       icon: this.BookOpen,
-      prompt: "I need help researching legal precedents for my case. Where should I start?",
+      prompt:
+        'I need help researching legal precedents for my case. Where should I start?',
     },
     {
-      id: "4",
-      title: "Civil Rights",
-      description: "Learn about civil rights protections and discrimination laws",
+      id: '4',
+      title: 'Civil Rights',
+      description:
+        'Learn about civil rights protections and discrimination laws',
       icon: this.Users,
-      prompt: "What are my civil rights protections under federal law?",
+      prompt: 'What are my civil rights protections under federal law?',
     },
     {
-      id: "5",
-      title: "Legal Procedures",
-      description: "Navigate court procedures and legal processes",
+      id: '5',
+      title: 'Legal Procedures',
+      description: 'Navigate court procedures and legal processes',
       icon: this.Gavel,
-      prompt: "Can you walk me through the legal process for filing a lawsuit?",
+      prompt: 'Can you walk me through the legal process for filing a lawsuit?',
     },
     {
-      id: "6",
-      title: "Privacy Rights",
-      description: "Understand privacy laws and data protection rights",
+      id: '6',
+      title: 'Privacy Rights',
+      description: 'Understand privacy laws and data protection rights',
       icon: this.Shield,
-      prompt: "What are my privacy rights regarding personal data collection?",
+      prompt: 'What are my privacy rights regarding personal data collection?',
     },
-  ]
+  ];
 
   toggleSidebar(): void {
     this.isSidebarOpen = !this.isSidebarOpen;
@@ -151,37 +163,45 @@ export class ChatComponent {
     private toastService: ToastService,
     private chatApiService: ChatApiService,
     private apiServiceProxy: ServiceProxy
-  ){
+  ) {
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
   }
 
   onSendMessage(message: string): void {
-  const userMessage = new ChatMessage();
-  userMessage.id = Date.now();
-  userMessage.message = message;
-  userMessage.isFromUser = true;
-  userMessage.createdAt = new Date();
+    const userMessage = new ChatMessage();
+    userMessage.id = Date.now();
+    userMessage.message = message;
+    userMessage.isFromUser = true;
+    userMessage.createdAt = new Date();
 
     this.messages.push(userMessage);
 
     this.isLoading = true;
-    console.log("Sending message via API:", message)
+    console.log('Sending message via API:', message);
 
-    this.chatApiService.sendMessage(message).subscribe({
+    let sessionId= undefined;
+    if(this.messages.length > 0){
+      sessionId = this.messages[0].sessionId;
+    }
+
+    this.chatApiService.sendMessage(message, undefined, sessionId).subscribe({
       next: (response) => {
-
         const botMessage = new ChatMessage();
 
         botMessage.id = Number.parseInt(String(response.id)) || Date.now() + 1;
-        botMessage.response = response.message ? response.message : "No response";
+        botMessage.response = response.message
+          ? response.message
+          : 'No response';
         botMessage.isFromUser = false;
-        botMessage.createdAt = response.createdAt ? new Date(response.createdAt) : new Date();
+        botMessage.createdAt = response.createdAt
+          ? new Date(response.createdAt)
+          : new Date();
 
         this.messages.push(botMessage);
         this.isLoading = false;
 
-        if(this.sidebarComponent) {
+        if (this.sidebarComponent) {
           this.sidebarComponent.refreshChatHistory();
         }
 
@@ -190,16 +210,17 @@ export class ChatComponent {
         // }
       },
       error: (error) => {
-        console.error("Error sending message:", error);
+        console.error('Error sending message:', error);
         this.isLoading = false;
 
         const errorMessage = new ChatMessage();
         errorMessage.id = Date.now() + 1;
-        errorMessage.response = "Sorry, I'm having trouble responding right now. Please try again.";
+        errorMessage.response =
+          "Sorry, I'm having trouble responding right now. Please try again.";
         errorMessage.isFromUser = false;
         errorMessage.createdAt = new Date();
-        this.messages.push(errorMessage)
-      }
+        this.messages.push(errorMessage);
+      },
     });
 
     /*
@@ -256,7 +277,7 @@ export class ChatComponent {
   }
 
   onSuggestionClick(suggestion: LegalSuggestion): void {
-    this.onSendMessage(suggestion.prompt)
+    this.onSendMessage(suggestion.prompt);
   }
 
   public onNewChat(): void {
@@ -265,21 +286,26 @@ export class ChatComponent {
     // this.toastService.success("Started new chat session");
   }
 
-
   loadChatSession(sessionId: string): void {
-    this.isLoading = true
+    this.isLoading = true;
     this.apiServiceProxy.history(sessionId).subscribe({
       next: (history) => {
         this.messages = history;
-        this.isLoading = false
+        this.isLoading = false;
         // this.toastService.success("Chat session loaded")
-        console.log(" Loaded chat session:", sessionId, "with", this.messages.length, "messages")
+        console.log(
+          ' Loaded chat session:',
+          sessionId,
+          'with',
+          this.messages.length,
+          'messages'
+        );
       },
       error: (error) => {
-        console.error(" Error loading chat session:", error)
-        this.isLoading = false
-        this.toastService.error("Failed to load chat session")
+        console.error(' Error loading chat session:', error);
+        this.isLoading = false;
+        this.toastService.error('Failed to load chat session');
       },
-    })
+    });
   }
 }
