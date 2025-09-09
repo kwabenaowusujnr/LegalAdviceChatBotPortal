@@ -14,8 +14,8 @@ export const appConfig: ApplicationConfig = {
   provideHttpClient(withInterceptorsFromDi()),
     {
       provide: API_BASE_URL,
-      // useValue: 'https://legalchatbot-api.azurewebsites.net'
-      useValue: 'https://vpcjwxxd-44398.uks1.devtunnels.ms'
+      useValue: 'https://legalchatbot-api.azurewebsites.net'
+      // useValue: 'https://vpcjwxxd-44398.uks1.devtunnels.ms'
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
