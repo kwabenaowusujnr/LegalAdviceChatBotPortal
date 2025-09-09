@@ -70,4 +70,8 @@ export class LoginComponent {
     this.router.navigate(["/register"])
     console.log("Sign up clicked")
   }
+
+  onBackToWebsite(): void{
+    this.router.navigate(["/"])
+  }
 }

@@ -21,7 +21,7 @@ export const routes: Routes = [
   {
     path: "login",
     loadComponent: () => import("./pages/chat/login/login.component").then((m) => m.LoginComponent),
-    // canActivate: [LoginGuard],
+    canActivate: [LoginGuard],
   },
   {
     path: "register",
@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: "chatV2",
     loadComponent: () => import("./pages/chat/chat.component").then((m) => m.ChatComponent),
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
 //   {
 //     path: "**",
