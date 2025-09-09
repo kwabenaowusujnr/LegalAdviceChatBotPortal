@@ -4,7 +4,8 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { API_BASE_URL, ServiceProxy } from './services/api-client';
-import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,9 +14,10 @@ export const appConfig: ApplicationConfig = {
   provideHttpClient(withInterceptorsFromDi()),
     {
       provide: API_BASE_URL,
-      useValue: 'https://legalchatbot-api.azurewebsites.net'
-      // useValue: 'https://vpcjwxxd-44398.uks1.devtunnels.ms'
+      // useValue: 'https://legalchatbot-api.azurewebsites.net'
+      useValue: 'https://vpcjwxxd-44398.uks1.devtunnels.ms'
     },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: ServiceProxy,
       useFactory: (http: HttpClient, baseUrl: string) => new ServiceProxy(http, baseUrl),

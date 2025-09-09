@@ -1,6 +1,6 @@
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BookOpen, ChevronDown, FileText, Gavel, Menu, Scale, Shield, Users } from 'lucide-angular';
 import { LucideAngularModule } from 'lucide-angular';
 import { ChatMessageComponent } from 'src/app/shared/chats-components/chat-message/chat-message.component';
@@ -11,7 +11,7 @@ import { UserMenuComponent } from 'src/app/shared/chats-components/user-menu/use
 import { AuthService } from 'src/app/services/auth';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
-import { ChatMessage } from 'src/app/services/api-client';
+import { ChatMessage, ServiceProxy } from 'src/app/services/api-client';
 import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing-indicator/typing-indicator.component';
 
 interface ConstitutionalDocument {
@@ -49,6 +49,8 @@ export class ChatComponent {
   isLoading = false;
   isSidebarOpen = false;
   showUserMenu = false;
+
+  @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
 
   // Icons
   menuIcon = Menu;
@@ -147,7 +149,8 @@ export class ChatComponent {
     public authService: AuthService,
     private router: Router,
     private toastService: ToastService,
-    private chatApiService: ChatApiService
+    private chatApiService: ChatApiService,
+    private apiServiceProxy: ServiceProxy
   ){
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
@@ -178,9 +181,13 @@ export class ChatComponent {
         this.messages.push(botMessage);
         this.isLoading = false;
 
-        if (this.messages.filter((m) => m.isFromUser === false).length === 1) {
-          this.toastService.success("Connected to NsemBot! Ask me anything about legal matters.")
+        if(this.sidebarComponent) {
+          this.sidebarComponent.refreshChatHistory();
         }
+
+        // if (this.messages.filter((m) => m.isFromUser === false).length === 1) {
+        //   this.toastService.success("Connected to NsemBot! Ask me anything about legal matters.")
+        // }
       },
       error: (error) => {
         console.error("Error sending message:", error);
@@ -256,5 +263,23 @@ export class ChatComponent {
     this.messages = [];
     this.selectedDocument = this.constitutionalDocuments[0];
     // this.toastService.success("Started new chat session");
+  }
+
+
+  loadChatSession(sessionId: string): void {
+    this.isLoading = true
+    this.apiServiceProxy.history(sessionId).subscribe({
+      next: (history) => {
+        this.messages = history;
+        this.isLoading = false
+        // this.toastService.success("Chat session loaded")
+        console.log(" Loaded chat session:", sessionId, "with", this.messages.length, "messages")
+      },
+      error: (error) => {
+        console.error(" Error loading chat session:", error)
+        this.isLoading = false
+        this.toastService.error("Failed to load chat session")
+      },
+    })
   }
 }

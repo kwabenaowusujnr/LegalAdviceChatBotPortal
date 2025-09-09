@@ -37,7 +37,7 @@ export interface IServiceProxy {
     /**
      * @return OK
      */
-    history2(): Observable<ChatMessageHistoryDto[]>;
+    userChatHistory(): Observable<ChatMessageHistoryDto[]>;
     /**
      * @return OK
      */
@@ -345,8 +345,8 @@ export class ServiceProxy implements IServiceProxy {
     /**
      * @return OK
      */
-    history2(httpContext?: HttpContext): Observable<ChatMessageHistoryDto[]> {
-        let url_ = this.baseUrl + "/api/Chat/history";
+    userChatHistory(httpContext?: HttpContext): Observable<ChatMessageHistoryDto[]> {
+        let url_ = this.baseUrl + "/api/Chat/userChatHistory";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -359,11 +359,11 @@ export class ServiceProxy implements IServiceProxy {
         };
 
         return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
-            return this.processHistory2(response_);
+            return this.processUserChatHistory(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processHistory2(response_ as any);
+                    return this.processUserChatHistory(response_ as any);
                 } catch (e) {
                     return _observableThrow(e) as any as Observable<ChatMessageHistoryDto[]>;
                 }
@@ -372,7 +372,7 @@ export class ServiceProxy implements IServiceProxy {
         }));
     }
 
-    protected processHistory2(response: HttpResponseBase): Observable<ChatMessageHistoryDto[]> {
+    protected processUserChatHistory(response: HttpResponseBase): Observable<ChatMessageHistoryDto[]> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1822,4 +1822,3 @@ function blobToText(blob: any): Observable<string> {
     });
 }
 
-//C:\Users\CrossTech\source\repos\LegalAdviceChatBotPortal\service.extensions.ts

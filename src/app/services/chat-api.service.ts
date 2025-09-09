@@ -18,7 +18,7 @@ export class ChatApiService {
 
   private initializeSession(): void {
     this.currentSessionId = this.generateSessionId()
-    console.log("[v0] Initialized chat session:", this.currentSessionId)
+    console.log(" Initialized chat session:", this.currentSessionId)
   }
 
   private generateSessionId(): string {
@@ -31,7 +31,7 @@ export class ChatApiService {
 
   startNewSession(): void {
     this.currentSessionId = this.generateSessionId()
-    console.log("[v0] Started new chat session:", this.currentSessionId)
+    console.log(" Started new chat session:", this.currentSessionId)
   }
 
   getChatHistory(): Observable<ChatMessageHistoryDto[]> {
@@ -41,11 +41,11 @@ export class ChatApiService {
 
     return this.serviceProxy.history(this.currentSessionId).pipe(
       map((apiMessages: ChatMessageHistoryDto[]) => {
-        console.log("[v0] Fetched chat history:", apiMessages);
+        console.log(" Fetched chat history:", apiMessages);
         return apiMessages;
       }),
       catchError((error) => {
-        console.error("[v0] Error getting chat history:", error)
+        console.error(" Error getting chat history:", error)
         this.toastService.error("Failed to load chat history.")
         return of([])
       }),
@@ -64,12 +64,12 @@ export class ChatApiService {
     chatInput.documentContext = documentContext;
 
 
-    console.log("[v0] Sending chat message:", chatInput);
+    console.log(" Sending chat message:", chatInput);
 
     return this.serviceProxy.sendMessage(chatInput).pipe(
       switchMap(() => this.getLatestBotResponse()),
       catchError((error) => {
-        console.error("[v0] Error sending message:", error)
+        console.error(" Error sending message:", error)
         this.toastService.error("Failed to send message. Please try again.")
 
         const chatMsg = new ChatMessage();

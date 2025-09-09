@@ -28,50 +28,40 @@
     </button>
   </div>
 
-   <!-- Navigation Content  -->
-  <div class="flex-1 overflow-y-auto">
-    <div class="p-3 sm:p-4 space-y-4 sm:space-y-6">
-       <!-- Navigation Sections  -->
-          <h3 class="text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wide">
-            Recent
-          </h3>
-      <div *ngFor="let section of navigationSections" class="space-y-2">
-        <div class="flex items-center justify-between">
+    <!-- Navigation Content -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="p-3 sm:p-4 space-y-4 sm:space-y-6">
+        <!-- Navigation Sections -->
+        <div  class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xs sm:text-sm font-medium text-muted-foreground uppercase tracking-wide">
+              Recent Chat
+            </h3>
 
-          <!-- <button
-            *ngIf="section.isCollapsible"
-            (click)="toggleSection(section)"
-            class="p-1 hover:bg-gray-100 rounded transition-colors"
-          >
-            <lucide-icon
-              [img]="chevronIcon"
-              class="w-3 sm:w-4 h-3 sm:h-4 text-gray-400 transition-transform"
-              [class.rotate-180]="!section.isExpanded"
-            ></lucide-icon>
-          </button> -->
-        </div>
+          </div>
 
-        <div *ngIf="!section.isCollapsible || section.isExpanded" class="space-y-1">
-          <button
-            *ngFor="let item of section.items"
-            class="w-full flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-gray-100 transition-colors group"
-            [class.bg-blue-50]="item.isActive"
-            [class.text-blue-700]="item.isActive"
-            [class.text-gray-700]="!item.isActive"
-          >
-            <lucide-icon
-              *ngIf="item.icon"
-              [img]="item.icon"
-              class="w-3 sm:w-4 h-3 sm:h-4 flex-shrink-0"
-              [class.text-blue-600]="item.isActive"
-              [class.text-gray-500]="!item.isActive"
-            ></lucide-icon>
-            <span class="text-xs sm:text-sm font-medium truncate">{{ item.label }}</span>
-          </button>
+          <div class="space-y-1">
+            <!-- Added loading state for Recent section and click handler for chat items -->
+            <div *ngIf="isLoadingHistory" class="flex items-center justify-center p-4">
+              <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-royal"></div>
+              <span class="ml-2 text-xs text-muted-foreground">Loading chats...</span>
+            </div>
+
+            <div
+              *ngIf="!isLoadingHistory && chatMessageHistory.length === 0 && (authService.isAuthenticated$ | async)"
+              class="text-center p-4">
+              <p class="text-xs text-muted-foreground">No recent chats</p>
+            </div>
+
+            <button *ngFor="let item of chatMessageHistory"
+              class="w-full flex items-center space-x-2 sm:space-x-3 p-2 rounded-lg hover:bg-muted transition-colors group"
+              (click)="onChatItemClick(item)">
+              <span class="text-xs sm:text-sm font-medium truncate">{{ item.lastMessage }}</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
    <!-- Footer  -->
   <div class="p-3 sm:p-4 border-t border-border">
