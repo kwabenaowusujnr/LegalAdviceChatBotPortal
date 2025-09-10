@@ -1,3 +1,4 @@
+import { AnalyticsService } from 'src/app/services/analytics.service';
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
@@ -162,13 +163,16 @@ export class ChatComponent {
     private router: Router,
     private toastService: ToastService,
     private chatApiService: ChatApiService,
-    private apiServiceProxy: ServiceProxy
+    private apiServiceProxy: ServiceProxy,
+    public analyticsService: AnalyticsService
   ) {
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
   }
 
   onSendMessage(message: string): void {
+    this.analyticsService.trackEvent('send_message', 'User sent a message', 'engagement');
+
     const userMessage = new ChatMessage();
     userMessage.id = Date.now();
     userMessage.message = message;

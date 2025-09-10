@@ -1,3 +1,4 @@
+import { AnalyticsService } from 'src/app/services/analytics.service';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -49,7 +50,8 @@ export class SidebarV2Component {
   constructor(
     private router: Router,
     public authService: AuthService,
-    private apiService: ServiceProxy
+    private apiService: ServiceProxy,
+    private analyticsService: AnalyticsService,
   ) {}
 
   ngOnInit(): void {
@@ -94,6 +96,7 @@ export class SidebarV2Component {
   }
 
   onNewChat(): void {
+    this.analyticsService.trackEvent('new_chat', 'User started a new chat', 'engagement');
     this.newChat.emit();
     this.closeSidebar.emit(); // Close sidebar on mobile after navigation
   }

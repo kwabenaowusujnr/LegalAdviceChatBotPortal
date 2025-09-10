@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Bot, Eye, EyeOff, Globe, Lock, LucideAngularModule, Mail, Phone, User } from 'lucide-angular';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 import { AuthService } from 'src/app/services/auth';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -59,6 +60,7 @@ export class RegisterComponent {
     private router: Router,
     private authService: AuthService,
     private toastService: ToastService,
+    private analyticsService: AnalyticsService
   ) { }
 
   onSignIn(): void {
@@ -93,6 +95,8 @@ export class RegisterComponent {
       this.toastService.warning("Please agree to the Terms of Service", "Validation Error")
       return
     }
+
+    this.analyticsService.trackEvent('register_attempt', 'User attempted registration', 'engagement');
 
     this.isLoading = true
 

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Bot, Eye, EyeOff, Lock, LucideAngularModule, Mail } from 'lucide-angular';
+import { AnalyticsService } from 'src/app/services/analytics.service';
 import { AuthService } from 'src/app/services/auth';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -29,6 +30,7 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService,
     private toastService: ToastService,
+    private analyticsService: AnalyticsService
   ) { }
 
   togglePasswordVisibility(): void {
@@ -36,6 +38,8 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.analyticsService.trackEvent('login_attempt', 'User attempted login', 'engagement');
+
     if (!this.email || !this.password) {
       this.toastService.warning("Please fill in all fields", "Validation Error")
       return
@@ -50,10 +54,12 @@ export class LoginComponent {
           this.toastService.success("Welcome back! Redirecting to chat...", "Login Successful")
           this.router.navigate(["/chatV2"])
         } else {
+          this.analyticsService.trackEvent('login_failed', 'User login failed', 'engagement');
           this.toastService.error("Invalid email or password. Please try again.", "Login Failed")
         }
       },
       error: () => {
+
         this.isLoading = false
         this.toastService.error("Something went wrong. Please try again later.", "Login Error")
       },
