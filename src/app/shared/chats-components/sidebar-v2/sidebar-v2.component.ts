@@ -74,6 +74,10 @@ export class SidebarV2Component {
   }
 
   private loadChatHistory(): void {
+    if(!this.authService.isAuthenticated()){
+      return;
+    }
+
     this.isLoadingHistory = true;
     this.chatMessageHistory = [];
 

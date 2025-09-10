@@ -12,6 +12,7 @@ import { Loader, LucideAngularModule, Mic, Plus, Send, Settings } from 'lucide-a
 })
 export class ChatInputComponent {
   @Input() isLoading = false
+  @Input() isDisabled = false
   @Output() messageSubmit = new EventEmitter<string>()
 
   inputValue = ""

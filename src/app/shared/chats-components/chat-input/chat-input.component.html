@@ -37,8 +37,12 @@
     </div>
 
     <!-- Disclaimer -->
-    <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
+    <!-- <p class="text-xs text-gray-500 dark:text-gray-400 text-center mt-3">
       NsemBot can make mistakes. Double check every answer.
+    </p> -->
+    <p class="text-xs text-muted-foreground mt-2 text-center px-2">
+      <span *ngIf="!isDisabled">NsemBot can make mistakes. Check important info.</span>
+      <span *ngIf="isDisabled" class="text-amber">Message limit reached. Sign up for unlimited access to NsemBot!</span>
     </p>
   </div>
 </div>

@@ -170,3 +170,6 @@
     </main>
   </div>
 </div>
+
+<!-- Added signup prompt modal for anonymous users who reach message limit -->
+<app-signup-prompt-modal [isOpen]="showSignupPrompt" (close)="closeSignupPrompt()"></app-signup-prompt-modal>

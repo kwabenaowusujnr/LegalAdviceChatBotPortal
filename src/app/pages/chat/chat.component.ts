@@ -23,6 +23,7 @@ import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { ChatMessage, ServiceProxy } from 'src/app/services/api-client';
 import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing-indicator/typing-indicator.component';
+import { SignupPromptModalComponent } from 'src/app/shared/signup-prompt-modal/signup-prompt-modal.component';
 
 interface ConstitutionalDocument {
   id: string;
@@ -49,6 +50,7 @@ interface LegalSuggestion {
     MessageWindowComponent,
     UserMenuComponent,
     TypingIndicatorComponent,
+    SignupPromptModalComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -58,6 +60,10 @@ export class ChatComponent {
   isLoading = false;
   isSidebarOpen = false;
   showUserMenu = false;
+
+  anonymousMessageCount = 0 // Added anonymous user message tracking
+  showSignupPrompt = false
+  readonly ANONYMOUS_MESSAGE_LIMIT = 3
 
   @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
 
@@ -173,6 +179,14 @@ export class ChatComponent {
   onSendMessage(message: string): void {
     this.analyticsService.trackEvent('send_message', 'User sent a message', 'engagement');
 
+    if(!this.authService.isAuthenticated()){
+      if(this.anonymousMessageCount >= this.ANONYMOUS_MESSAGE_LIMIT){
+        this.showSignupPrompt = true
+        return;
+      }
+      this.anonymousMessageCount++;
+    }
+
     const userMessage = new ChatMessage();
     userMessage.id = Date.now();
     userMessage.message = message;
@@ -212,6 +226,10 @@ export class ChatComponent {
         // if (this.messages.filter((m) => m.isFromUser === false).length === 1) {
         //   this.toastService.success("Connected to NsemBot! Ask me anything about legal matters.")
         // }
+
+        if (!this.authService.isAuthenticated() && this.anonymousMessageCount < this.ANONYMOUS_MESSAGE_LIMIT - 1){
+          this.toastService.info("You have 1 message remaining. Sign up for unlimited access!")
+        }
       },
       error: (error) => {
         console.error('Error sending message:', error);
@@ -287,6 +305,10 @@ export class ChatComponent {
   public onNewChat(): void {
     this.messages = [];
     this.selectedDocument = this.constitutionalDocuments[0];
+
+    if(!this.authService.isAuthenticated()){
+      this.anonymousMessageCount = 0;
+    }
     // this.toastService.success("Started new chat session");
   }
 
@@ -312,4 +334,13 @@ export class ChatComponent {
       },
     });
   }
+
+  closeSignupPrompt(): void {
+    this.showSignupPrompt = false
+  }
+
+  get isAnonymousLimitReached(): boolean {
+    return !this.authService.isAuthenticated() && this.anonymousMessageCount >= this.ANONYMOUS_MESSAGE_LIMIT
+  }
+
 }
