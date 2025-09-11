@@ -1,8 +1,8 @@
 {
   "routes": [
     {
-      "route": "/*",
-      "serve": "/index.html",
+      "rewrite": "/index.html",
+    "exclude": ["/assets/*", "/*.css", "/*.js"],
       "statusCode": 200
     }
   ]
