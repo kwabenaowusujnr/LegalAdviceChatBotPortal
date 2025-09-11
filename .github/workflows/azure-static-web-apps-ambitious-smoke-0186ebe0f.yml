@@ -19,9 +19,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-      - name: Copy routes.json to output directory
-        run: |
-          cp routes.json dist/legal-advice-chat-bot-portal/browser/routes.json
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
