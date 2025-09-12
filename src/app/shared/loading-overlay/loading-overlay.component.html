@@ -1,0 +1,19 @@
+<div *ngIf="isVisible" class="loading-overlay" role="dialog" aria-modal="true" [attr.aria-label]="message">
+  <!-- Overlay Background -->
+  <div class="overlay-backdrop"></div>
+
+  <!-- Loading Content -->
+  <div class="loading-content">
+    <!-- Spinning Icon -->
+    <div class="spinner-container">
+      <!-- <lucide-angular [img]="loaderIcon" class="spinner-icon"></lucide-angular> -->
+      <img src="assets/icon/favicon.png" alt="Loading" class="spinner-image h-16" />
+      <!-- <div class="spinner"></div> -->
+    </div>
+
+    <!-- Loading Message -->
+    <div *ngIf="showMessage" class="loading-message">
+      {{ message }}
+    </div>
+  </div>
+</div>

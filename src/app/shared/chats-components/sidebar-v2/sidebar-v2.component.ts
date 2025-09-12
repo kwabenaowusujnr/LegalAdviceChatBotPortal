@@ -1,3 +1,4 @@
+import { LoadingService } from './../../../services/loading.service';
 import { AnalyticsService } from 'src/app/services/analytics.service';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -54,7 +55,9 @@ export class SidebarV2Component {
     public authService: AuthService,
     private apiService: ServiceProxy,
     private analyticsService: AnalyticsService,
-  ) {}
+    private loadingService: LoadingService
+  ) {
+  }
 
   ngOnInit(): void {
     this.authService.isAuthenticated$.subscribe((isAuthenticated) => {
@@ -131,12 +134,17 @@ export class SidebarV2Component {
     event.stopPropagation()
 
     if (confirm("Are you sure you want to delete this chat?")) {
+      this.loadingService.showLoading("Deleting chat...");
+
       this.apiService.session(sessionId).subscribe({
         next: () => {
+          this.loadingService.hideLoading()
+          this.analyticsService.trackEvent('delete_chat', 'User deleted a chat session', 'engagement')
           // Refresh the chat history after successful deletion
           this.refreshChatHistory()
         },
         error: (error) => {
+          this.loadingService.hideLoading()
           console.error("Failed to delete chat session:", error)
           alert("Failed to delete chat. Please try again.")
         },

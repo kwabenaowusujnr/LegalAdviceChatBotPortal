@@ -24,6 +24,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { ChatMessage, ServiceProxy } from 'src/app/services/api-client';
 import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing-indicator/typing-indicator.component';
 import { SignupPromptModalComponent } from 'src/app/shared/signup-prompt-modal/signup-prompt-modal.component';
+import { LoadingService } from 'src/app/services/loading.service';
 
 interface ConstitutionalDocument {
   id: string;
@@ -170,7 +171,8 @@ export class ChatComponent {
     private toastService: ToastService,
     private chatApiService: ChatApiService,
     private apiServiceProxy: ServiceProxy,
-    public analyticsService: AnalyticsService
+    public analyticsService: AnalyticsService,
+    private loadingService: LoadingService
   ) {
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
@@ -313,6 +315,8 @@ export class ChatComponent {
   }
 
   loadChatSession(sessionId: string): void {
+    this.loadingService.showLoading("Loading...");
+
     this.isLoading = true;
     this.apiServiceProxy.history(sessionId).subscribe({
       next: (history) => {
@@ -326,10 +330,12 @@ export class ChatComponent {
           this.messages.length,
           'messages'
         );
+        this.loadingService.hideLoading();
       },
       error: (error) => {
         console.error(' Error loading chat session:', error);
         this.isLoading = false;
+        this.loadingService.hideLoading();
         this.toastService.error('Failed to load chat session');
       },
     });
