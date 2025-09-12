@@ -11,6 +11,7 @@ import {
   Settings,
   ChevronDown,
   X,
+  Trash2,
 } from 'lucide-angular';
 import { NavigationSection } from 'src/app/core/models/Message';
 import { Router } from '@angular/router';
@@ -46,6 +47,7 @@ export class SidebarV2Component {
   settingsIcon = Settings;
   chevronIcon = ChevronDown;
   closeIcon = X;
+  trashIcon = Trash2
 
   constructor(
     private router: Router,
@@ -121,6 +123,24 @@ export class SidebarV2Component {
   public refreshChatHistory(): void {
     if (this.authService.isAuthenticated$) {
       this.loadChatHistory()
+    }
+  }
+
+  deleteChatSession(sessionId: string, event: Event): void {
+    // Prevent the click event from bubbling up to the parent button
+    event.stopPropagation()
+
+    if (confirm("Are you sure you want to delete this chat?")) {
+      this.apiService.session(sessionId).subscribe({
+        next: () => {
+          // Refresh the chat history after successful deletion
+          this.refreshChatHistory()
+        },
+        error: (error) => {
+          console.error("Failed to delete chat session:", error)
+          alert("Failed to delete chat. Please try again.")
+        },
+      })
     }
   }
 }
