@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Loader, LucideAngularModule, Mic, Plus, Send, Settings } from 'lucide-angular';
@@ -10,10 +10,12 @@ import { Loader, LucideAngularModule, Mic, Plus, Send, Settings } from 'lucide-a
   templateUrl: './chat-input.component.html',
   styleUrl: './chat-input.component.css'
 })
-export class ChatInputComponent {
+export class ChatInputComponent implements AfterViewInit {
   @Input() isLoading = false
   @Input() isDisabled = false
   @Output() messageSubmit = new EventEmitter<string>()
+
+  @ViewChild('textarea') textarea!: ElementRef<HTMLTextAreaElement>;
 
   inputValue = ""
 
@@ -55,5 +57,9 @@ export class ChatInputComponent {
 
   onVoiceInput() {
     console.log("Starting voice input...")
+  }
+
+  ngAfterViewInit(): void {
+    this.textarea.nativeElement.focus();
   }
 }
