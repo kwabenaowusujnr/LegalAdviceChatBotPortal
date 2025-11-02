@@ -1,7 +1,7 @@
 import { AnalyticsService } from 'src/app/services/analytics.service';
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import {
   BookOpen,
   ChevronDown,
@@ -56,7 +56,7 @@ interface LegalSuggestion {
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
 })
-export class ChatComponent {
+export class ChatComponent implements AfterViewChecked {
   //messages: ChatMessage[] = []
   isLoading = false;
   isSidebarOpen = false;
@@ -67,6 +67,7 @@ export class ChatComponent {
   readonly ANONYMOUS_MESSAGE_LIMIT = 3
 
   @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
+  @ViewChild('messagesContainer', { static: false }) messagesContainer!: ElementRef;
 
   // Icons
   menuIcon = Menu;
@@ -347,6 +348,20 @@ export class ChatComponent {
 
   get isAnonymousLimitReached(): boolean {
     return !this.authService.isAuthenticated() && this.anonymousMessageCount >= this.ANONYMOUS_MESSAGE_LIMIT
+  }
+
+  ngAfterViewChecked(): void {
+    this.scrollToBottom();
+  }
+
+  private scrollToBottom(): void {
+    if (this.messagesContainer) {
+      const element = this.messagesContainer.nativeElement;
+      element.scrollTo({
+        top: element.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }
 
 }
