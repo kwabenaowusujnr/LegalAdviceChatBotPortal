@@ -1,8 +1,1 @@
-# Auto-Scroll to Bottom Implementation
-
-## Tasks
-- [x] Create TODO.md file
-- [x] Add template reference variable to scrollable container in chat.component.html
-- [x] Update chat.component.ts with necessary imports and ViewChild
-- [x] Implement AfterViewChecked interface and scrollToBottom method
-- [x] Call scrollToBottom after messages are added in onSendMessage and loadChatSession
+- [x] Update src/app/shared/toast-container/toast-container.component.css to add position: fixed; top: 1rem; right: 1rem; to :host > div for floating to upper right corner.

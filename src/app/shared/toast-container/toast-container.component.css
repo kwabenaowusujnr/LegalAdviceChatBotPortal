@@ -4,6 +4,9 @@
 
 :host > div {
   pointer-events: auto;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
 }
 
 @media (max-width: 640px) {
