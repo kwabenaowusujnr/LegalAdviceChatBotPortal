@@ -1,24 +1,30 @@
-# Token Expiration Auto-Logout Implementation
+# Voice Input Implementation TODO
 
 ## Tasks
 
-- [ ] Update AuthService to add token expiration checking
-  - [ ] Add `isTokenExpired()` method
-  - [ ] Add `startTokenExpirationMonitor()` method
-  - [ ] Add `stopTokenExpirationMonitor()` method
-  - [ ] Add `handleTokenExpiration()` method
-  - [ ] Update `hasValidToken()` to check expiration
-  - [ ] Update constructor to start monitoring
-  - [ ] Update `logout()` to stop monitoring
+- [x] Create Speech Recognition Service
+  - [x] Implement Web Speech API wrapper
+  - [x] Add browser compatibility checks
+  - [x] Handle recording states
+  - [x] Provide Observable streams for transcription
 
-- [ ] Update Auth Interceptor to check token expiration
-  - [ ] Check token validity before adding to requests
-  - [ ] Handle expired tokens appropriately
+- [x] Update chat-input.component.ts
+  - [x] Inject SpeechRecognitionService and ToastService
+  - [x] Add recording state properties
+  - [x] Implement voice recording toggle
+  - [x] Handle transcription results
+  - [x] Add error handling
 
-- [ ] Update App Component to ensure monitoring is active
-  - [ ] Initialize token monitoring on app start
+- [x] Update chat-input.component.html
+  - [x] Add visual indicators for recording state
+  - [x] Update microphone button states
+  - [x] Add recording animation classes
 
-- [ ] Test the implementation
-  - [ ] Verify automatic logout works
-  - [ ] Verify toast notification appears
-  - [ ] Verify redirect to login page
+- [x] Add CSS animations
+  - [x] Create pulsing animation for recording
+  - [x] Add transition effects
+
+- [ ] Testing
+  - [ ] Test browser compatibility
+  - [ ] Test microphone permissions
+  - [ ] Test error scenarios
