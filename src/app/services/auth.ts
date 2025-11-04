@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 import {
   ServiceProxy,
   UserLoginInputDto,
   AuthResponse,
   UserRegistrationInputDto,
 } from './api-client';
+import { ToastService } from './toast.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,20 +17,124 @@ export class AuthService {
     this.hasValidToken()
   );
   public isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
+  private tokenExpirationCheckInterval: any;
+  private readonly CHECK_INTERVAL = 30000; // Check every 30 seconds
 
-  constructor(private apiClient: ServiceProxy) {
+  constructor(
+    private apiClient: ServiceProxy,
+    private router: Router,
+    private toastService: ToastService
+  ) {
     // Check authentication status on service initialization
     this.checkAuthStatus();
+    // Start monitoring token expiration if user is authenticated
+    if (this.hasValidToken()) {
+      this.startTokenExpirationMonitor();
+    }
   }
 
   private hasValidToken(): boolean {
     const token = localStorage.getItem('authToken');
-    return !!token;
+    if (!token) {
+      return false;
+    }
+
+    // Check if token is expired
+    if (this.isTokenExpired()) {
+      return false;
+    }
+
+    return true;
   }
 
   private checkAuthStatus(): void {
     const isAuth = this.hasValidToken();
     this.isAuthenticatedSubject.next(isAuth);
+  }
+
+  public isTokenExpired(): boolean {
+    const expiresAtStr = localStorage.getItem('tokenExpiresAt');
+    if (!expiresAtStr) {
+      return false; // If no expiration date, assume token doesn't expire
+    }
+
+    try {
+      const expiresAt = new Date(expiresAtStr);
+      const now = new Date();
+      return now >= expiresAt;
+    } catch (error) {
+      console.error('Error parsing token expiration date:', error);
+      return true; // If we can't parse the date, consider it expired
+    }
+  }
+
+  private startTokenExpirationMonitor(): void {
+    // Clear any existing interval
+    this.stopTokenExpirationMonitor();
+
+    // Check immediately
+    if (this.isTokenExpired()) {
+      this.handleTokenExpiration();
+      return;
+    }
+
+    // Set up periodic checking
+    this.tokenExpirationCheckInterval = setInterval(() => {
+      if (this.isTokenExpired()) {
+        this.handleTokenExpiration();
+      }
+    }, this.CHECK_INTERVAL);
+
+    // Also set a timeout for the exact expiration time if available
+    const expiresAtStr = localStorage.getItem('tokenExpiresAt');
+    if (expiresAtStr) {
+      try {
+        const expiresAt = new Date(expiresAtStr);
+        const now = new Date();
+        const timeUntilExpiration = expiresAt.getTime() - now.getTime();
+
+        if (timeUntilExpiration > 0) {
+          setTimeout(() => {
+            if (this.isTokenExpired()) {
+              this.handleTokenExpiration();
+            }
+          }, timeUntilExpiration);
+        }
+      } catch (error) {
+        console.error('Error setting up expiration timeout:', error);
+      }
+    }
+  }
+
+  private stopTokenExpirationMonitor(): void {
+    if (this.tokenExpirationCheckInterval) {
+      clearInterval(this.tokenExpirationCheckInterval);
+      this.tokenExpirationCheckInterval = null;
+    }
+  }
+
+  private handleTokenExpiration(): void {
+    // Stop monitoring
+    this.stopTokenExpirationMonitor();
+
+    // Clear auth data
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('tokenExpiresAt');
+    localStorage.removeItem('user');
+    sessionStorage.clear();
+
+    // Update authentication state
+    this.isAuthenticatedSubject.next(false);
+
+    // Show notification
+    this.toastService.warning(
+      'Your session has expired. Please log in again.',
+      'Session Expired',
+      7000
+    );
+
+    // Navigate to login page
+    this.router.navigate(['/login']);
   }
 
   login(email: string, password: string): Observable<boolean> {
@@ -51,6 +157,10 @@ export class AuthService {
           }
 
           this.isAuthenticatedSubject.next(true);
+
+          // Start monitoring token expiration
+          this.startTokenExpirationMonitor();
+
           return true;
         }
         return false;
@@ -93,6 +203,10 @@ export class AuthService {
           }
 
           this.isAuthenticatedSubject.next(true);
+
+          // Start monitoring token expiration
+          this.startTokenExpirationMonitor();
+
           return true;
         }
         return false;
@@ -105,6 +219,9 @@ export class AuthService {
   }
 
   logout(): Observable<boolean> {
+    // Stop monitoring token expiration
+    this.stopTokenExpirationMonitor();
+
     localStorage.removeItem('authToken');
     localStorage.removeItem('tokenExpiresAt');
     localStorage.removeItem('user');
