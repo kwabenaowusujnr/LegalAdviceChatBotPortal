@@ -1,7 +1,7 @@
 import { AnalyticsService } from 'src/app/services/analytics.service';
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewChecked, HostListener } from '@angular/core';
 import {
   BookOpen,
   ChevronDown,
@@ -71,6 +71,7 @@ export class ChatComponent implements AfterViewChecked {
 
   @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
   @ViewChild('messagesContainer', { static: false }) messagesContainer!: ElementRef;
+  @ViewChild('dropdownContainer', { static: false }) dropdownContainer!: ElementRef;
 
   // Icons
   menuIcon = Menu;
@@ -87,22 +88,22 @@ export class ChatComponent implements AfterViewChecked {
 
   constitutionalDocuments: ConstitutionalDocument[] = [
     {
-      id: '1',
+      id: 'constitution',
       name: '1992 Constitution',
       description: 'The supreme law of Ghana.',
     },
     {
-      id: '2',
+      id: 'labour',
       name: 'Labour Act, 2003',
       description: 'Consolidates laws on employment and labour rights.',
     },
     {
-      id: '3',
+      id: 'intestate',
       name: 'Intestate Succession Law, 1985 (PNDCL 111)',
       description: 'Governs inheritance when a person dies without a will.',
     },
     {
-      id: '4',
+      id: 'right_to_information',
       name: 'Right to Information Act, 2019',
       description:
         'Gives citizens access to information held by public institutions',
@@ -209,7 +210,7 @@ export class ChatComponent implements AfterViewChecked {
       sessionId = this.messages[0].sessionId;
     }
 
-    this.chatApiService.sendMessage(message, undefined, sessionId).subscribe({
+    this.chatApiService.sendMessage(message, this.selectedDocument?.id , sessionId).subscribe({
       next: (response) => {
         const botMessage = new ChatMessage();
 
@@ -359,6 +360,13 @@ export class ChatComponent implements AfterViewChecked {
 
   get isAnonymousLimitReached(): boolean {
     return !this.authService.isAuthenticated() && this.anonymousMessageCount >= this.ANONYMOUS_MESSAGE_LIMIT
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (this.dropdownContainer && !this.dropdownContainer.nativeElement.contains(event.target)) {
+      this.isDropdownOpen = false;
+    }
   }
 
   ngAfterViewChecked(): void {

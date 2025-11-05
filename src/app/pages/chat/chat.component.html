@@ -39,9 +39,9 @@
             NsemBot
           </h2>
 
-          <div class="relative dropdown-container">
+          <div class="relative dropdown-container" #dropdownContainer>
             <button
-              [disabled]="true"
+              [disabled]="false"
               (click)="toggleDropdown()"
               class="flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs text-forest hover:bg-blue-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
             >
