@@ -1,9 +1,9 @@
 {
-  "runtime": "Net80",
+  "runtime": "Net90",
   "defaultVariables": null,
   "documentGenerator": {
     "fromDocument": {
-      "url": "https://legalchatbot-api.azurewebsites.net/swagger/v1/swagger.json",
+      "url": "https://nsembot.com/swagger/v1/swagger.json",
       "output": null,
       "newLineBehavior": "Auto"
     }
