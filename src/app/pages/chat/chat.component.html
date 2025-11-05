@@ -16,6 +16,7 @@
       (closeSidebar)="closeSidebar()"
       (newChat)="onNewChat()"
       (loadChatSession)="loadChatSession($event)"
+      (openHelpSupport)="onOpenHelpSupport()"
     ></app-sidebar-v2>
   </div>
 
@@ -173,3 +174,6 @@
 
 <!-- Added signup prompt modal for anonymous users who reach message limit -->
 <app-signup-prompt-modal [isOpen]="showSignupPrompt" (close)="closeSignupPrompt()"></app-signup-prompt-modal>
+
+<!-- Help & Support Modal -->
+<app-help-support-modal [isOpen]="showHelpModal" (closeModal)="closeHelpModal()"></app-help-support-modal>

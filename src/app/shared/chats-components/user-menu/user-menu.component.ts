@@ -3,19 +3,21 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { HelpCircle, LogOut, LucideAngularModule, Settings, User } from 'lucide-angular';
 import { SettingsModalComponent } from '../../settings-modal/settings-modal.component';
 import { ProfileManagementModalComponent } from '../../profile-management-modal/profile-management-modal.component';
+import { HelpSupportModalComponent } from '../../help-support-modal/help-support-modal.component';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { AuthService } from 'src/app/services/auth';
 
 @Component({
   selector: 'app-user-menu',
-  imports: [CommonModule, LucideAngularModule, ProfileManagementModalComponent],
+  imports: [CommonModule, LucideAngularModule, ProfileManagementModalComponent, HelpSupportModalComponent],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.css'
 })
 export class UserMenuComponent implements OnInit {
   isOpen = false;
   showSettingsModal = false;
+  showHelpModal = false;
 
   // User data
   currentUser: any = null;
@@ -130,8 +132,7 @@ export class UserMenuComponent implements OnInit {
   }
 
   onHelpClick(): void {
-    this.toastService.info("Help documentation coming soon!", "Feature Not Available")
-    console.log("Help clicked")
+    this.showHelpModal = true;
     this.closeMenu()
   }
 
@@ -149,6 +150,10 @@ export class UserMenuComponent implements OnInit {
     this.showSettingsModal = false;
     // Reload user data in case profile was updated
     this.loadUserData();
+  }
+
+  onCloseHelpModal(): void {
+    this.showHelpModal = false;
   }
 
   @HostListener("document:click", ["$event"])

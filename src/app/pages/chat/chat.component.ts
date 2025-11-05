@@ -24,6 +24,7 @@ import { ToastService } from 'src/app/services/toast.service';
 import { ChatMessage, ServiceProxy } from 'src/app/services/api-client';
 import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing-indicator/typing-indicator.component';
 import { SignupPromptModalComponent } from 'src/app/shared/signup-prompt-modal/signup-prompt-modal.component';
+import { HelpSupportModalComponent } from 'src/app/shared/help-support-modal/help-support-modal.component';
 import { LoadingService } from 'src/app/services/loading.service';
 
 interface ConstitutionalDocument {
@@ -51,7 +52,8 @@ interface LegalSuggestion {
     MessageWindowComponent,
     UserMenuComponent,
     TypingIndicatorComponent,
-    SignupPromptModalComponent
+    SignupPromptModalComponent,
+    HelpSupportModalComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -64,6 +66,7 @@ export class ChatComponent implements AfterViewChecked {
 
   anonymousMessageCount = 0 // Added anonymous user message tracking
   showSignupPrompt = false
+  showHelpModal = false
   readonly ANONYMOUS_MESSAGE_LIMIT = 3
 
   @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
@@ -344,6 +347,14 @@ export class ChatComponent implements AfterViewChecked {
 
   closeSignupPrompt(): void {
     this.showSignupPrompt = false
+  }
+
+  onOpenHelpSupport(): void {
+    this.showHelpModal = true;
+  }
+
+  closeHelpModal(): void {
+    this.showHelpModal = false;
   }
 
   get isAnonymousLimitReached(): boolean {

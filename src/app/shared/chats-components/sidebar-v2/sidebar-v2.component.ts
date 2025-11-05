@@ -33,6 +33,7 @@ export class SidebarV2Component {
   @Output() closeSidebar = new EventEmitter<void>();
   @Output() newChat = new EventEmitter<void>();
   @Output() loadChatSession = new EventEmitter<string>();
+  @Output() openHelpSupport = new EventEmitter<void>();
 
   isExpanded = true;
 
@@ -150,5 +151,10 @@ export class SidebarV2Component {
         },
       })
     }
+  }
+
+  onHelpSupportClick(): void {
+    this.openHelpSupport.emit();
+    this.closeSidebar.emit(); // Close sidebar on mobile after opening modal
   }
 }
