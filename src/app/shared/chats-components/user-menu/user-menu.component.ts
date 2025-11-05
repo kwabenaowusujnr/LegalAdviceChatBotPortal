@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { HelpCircle, LogOut, LucideAngularModule, Settings, User } from 'lucide-angular';
 import { SettingsModalComponent } from '../../settings-modal/settings-modal.component';
+import { ProfileManagementModalComponent } from '../../profile-management-modal/profile-management-modal.component';
 import { Router } from '@angular/router';
 import { ToastService } from 'src/app/services/toast.service';
 import { AuthService } from 'src/app/services/auth';
 
 @Component({
   selector: 'app-user-menu',
-  imports: [CommonModule, LucideAngularModule, SettingsModalComponent],
+  imports: [CommonModule, LucideAngularModule, ProfileManagementModalComponent],
   templateUrl: './user-menu.component.html',
   styleUrl: './user-menu.component.css'
 })
@@ -123,12 +124,6 @@ export class UserMenuComponent implements OnInit {
     this.isOpen = false
   }
 
-  onProfileClick(): void {
-    this.toastService.info("Profile management coming soon!", "Feature Not Available")
-    console.log("Profile clicked")
-    this.closeMenu()
-  }
-
   onSettingsClick(): void {
     this.showSettingsModal = true;
     this.closeMenu()
@@ -151,7 +146,9 @@ export class UserMenuComponent implements OnInit {
   }
 
   onCloseSettingsModal(): void {
-    this.showSettingsModal = false
+    this.showSettingsModal = false;
+    // Reload user data in case profile was updated
+    this.loadUserData();
   }
 
   @HostListener("document:click", ["$event"])

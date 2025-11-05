@@ -1,0 +1,302 @@
+/* Profile Management Modal Styles */
+
+/* Custom scrollbar for modal content */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #9ca3af;
+  border-radius: 3px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
+/* Avatar animation */
+.avatar-container {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.avatar-container:hover {
+  transform: scale(1.05);
+}
+
+/* Tab transitions */
+.tab-button {
+  transition: all 0.2s ease;
+}
+
+/* Form input focus styles */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Checkbox custom styles */
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #6366f1;
+  border-color: #6366f1;
+}
+
+/* Button hover effects */
+button {
+  transition: all 0.2s ease;
+}
+
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Stats cards */
+.stats-card {
+  transition: all 0.2s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Session item hover */
+.session-item {
+  transition: all 0.2s ease;
+}
+
+.session-item:hover {
+  background-color: #f9fafb;
+}
+
+/* Delete button animation */
+.delete-button {
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+/* Modal backdrop blur */
+.modal-backdrop {
+  backdrop-filter: blur(4px);
+}
+
+/* Tab content fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tab-content {
+  animation: fadeIn 0.3s ease;
+}
+
+/* Privacy toggle switches */
+.privacy-toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.privacy-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.privacy-toggle .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.privacy-toggle .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.privacy-toggle input:checked + .slider {
+  background-color: #6366f1;
+}
+
+.privacy-toggle input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* Activity log items */
+.activity-log-item {
+  transition: all 0.2s ease;
+}
+
+.activity-log-item:hover {
+  background-color: #e5e7eb;
+}
+
+/* Export button pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(99, 102, 241, 0);
+  }
+}
+
+.export-button:hover {
+  animation: pulse 1.5s infinite;
+}
+
+/* Password strength indicator */
+.password-strength {
+  height: 4px;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.password-strength.weak {
+  background-color: #ef4444;
+  width: 25%;
+}
+
+.password-strength.fair {
+  background-color: #f59e0b;
+  width: 50%;
+}
+
+.password-strength.good {
+  background-color: #eab308;
+  width: 75%;
+}
+
+.password-strength.strong {
+  background-color: #22c55e;
+  width: 100%;
+}
+
+/* Delete confirmation modal */
+.delete-confirm-modal {
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 100vh;
+    border-radius: 0;
+  }
+
+  .tab-navigation {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+  }
+}
+
+/* Custom royal color variable */
+.bg-royal {
+  background-color: #6366f1;
+}
+
+.text-royal {
+  color: #6366f1;
+}
+
+.border-royal {
+  border-color: #6366f1;
+}
+
+.hover\:bg-royal\/90:hover {
+  background-color: rgba(99, 102, 241, 0.9);
+}
+
+.hover\:bg-royal\/10:hover {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+.focus\:ring-royal:focus {
+  --tw-ring-color: #6366f1;
+}
+
+.focus\:border-royal:focus {
+  border-color: #6366f1;
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+/* Ensure modal is above other elements */
+.modal-container {
+  z-index: 9999;
+}

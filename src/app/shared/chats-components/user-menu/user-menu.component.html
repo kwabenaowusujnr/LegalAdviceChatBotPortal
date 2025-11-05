@@ -16,13 +16,6 @@
     <div class="py-1">
       <button
         class="flex items-center w-full px-4 py-2 text-sm text-popover-foreground hover:bg-accent transition-colors"
-        (click)="onProfileClick()" role="menuitem">
-        <lucide-angular [img]="userIcon" class="w-4 h-4 mr-3 text-muted-foreground"></lucide-angular>
-        Profile
-      </button>
-
-      <button
-        class="flex items-center w-full px-4 py-2 text-sm text-popover-foreground hover:bg-accent transition-colors"
         (click)="onSettingsClick()" role="menuitem">
         <lucide-angular [img]="settingsIcon" class="w-4 h-4 mr-3 text-muted-foreground"></lucide-angular>
         Settings
@@ -48,8 +41,8 @@
   </div>
 </div>
 
-<app-settings-modal
+<!-- Settings Modal (merged Profile Management and App Settings) -->
+<app-profile-management-modal
   [isOpen]="showSettingsModal"
-  [userData]="currentUser"
   (closeModal)="onCloseSettingsModal()">
-</app-settings-modal>
+</app-profile-management-modal>
