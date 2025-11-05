@@ -2,15 +2,15 @@
   <button
     class="w-8 h-8 bg-forest rounded-full flex items-center justify-center hover:bg-forest/90 transition-colors focus:outline-none focus:ring-2 focus:ring-forest focus:ring-offset-2"
     (click)="toggleMenu()" [attr.aria-expanded]="isOpen" aria-haspopup="true">
-    <span class="text-white text-sm font-medium">K</span>
+    <span class="text-white text-sm font-medium">{{ userInitials }}</span>
   </button>
 
   <div *ngIf="isOpen"
     class="absolute right-0 mt-2 w-56 bg-popover rounded-lg shadow-lg border border-border py-1 z-50 animate-in fade-in-0 zoom-in-95 duration-200"
     role="menu" aria-orientation="vertical">
     <div class="px-4 py-3 border-b border-border">
-      <p class="text-sm font-medium text-popover-foreground">KhrossGh</p>
-      <p class="text-xs text-muted-foreground">khrossghexample.com</p>
+      <p class="text-sm font-medium text-popover-foreground">{{ userName }}</p>
+      <p class="text-xs text-muted-foreground">{{ userEmail }}</p>
     </div>
 
     <div class="py-1">
@@ -48,5 +48,8 @@
   </div>
 </div>
 
-<app-settings-modal [isOpen]="showSettingsModal" (closeModal)="onCloseSettingsModal()">
+<app-settings-modal
+  [isOpen]="showSettingsModal"
+  [userData]="currentUser"
+  (closeModal)="onCloseSettingsModal()">
 </app-settings-modal>
