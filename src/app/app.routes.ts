@@ -33,6 +33,10 @@ export const routes: Routes = [
     loadComponent: () => import("./pages/chat/chat.component").then((m) => m.ChatComponent),
     // canActivate: [AuthGuard],
   },
+  {
+    path: "privacy-policy",
+    loadComponent: () => import("./pages/privacy-policy/privacy-policy.component").then((m) => m.PrivacyPolicyComponent),
+  },
 //   {
 //     path: "**",
 //     redirectTo: "/login",
