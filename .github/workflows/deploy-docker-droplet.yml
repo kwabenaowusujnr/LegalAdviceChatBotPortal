@@ -61,12 +61,12 @@ jobs:
             docker stop legal-advice-chatbot || true
             docker rm legal-advice-chatbot || true
 
-            # Run new container
+            # Run new container on port 3000 (Nginx reverse proxy expects this)
             docker run -d \
               --name legal-advice-chatbot \
               --restart unless-stopped \
-              -p 80:80 \
-              ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+              -p 3000:80 \
+              ghcr.io/kwabenaowusujnr/legaladvicechatbotportal:latest
 
             # Clean up old images
             docker image prune -f
