@@ -13,6 +13,9 @@ import {
   ChevronDown,
   X,
   Trash2,
+  Sparkles,
+  LogIn,
+  UserPlus,
 } from 'lucide-angular';
 import { NavigationSection } from 'src/app/core/models/Message';
 import { Router } from '@angular/router';
@@ -49,7 +52,10 @@ export class SidebarV2Component {
   settingsIcon = Settings;
   chevronIcon = ChevronDown;
   closeIcon = X;
-  trashIcon = Trash2
+  trashIcon = Trash2;
+  SparklesIcon = Sparkles;
+  LogInIcon = LogIn;
+  UserPlusIcon = UserPlus;
 
   constructor(
     private router: Router,

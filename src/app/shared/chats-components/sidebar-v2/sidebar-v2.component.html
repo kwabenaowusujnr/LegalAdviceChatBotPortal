@@ -82,17 +82,34 @@
 
     <ng-template #loginPrompt>
       <div class="space-y-3">
-        <div class="text-center p-3 bg-royal/10 rounded-lg border border-royal/20">
-          <p class="text-xs text-muted-foreground mb-2">Sign in to unlock full features</p>
-          <div class="space-y-2">
-            <button (click)="navigateToLogin()"
-              class="w-full px-3 py-2 bg-royal text-white text-xs font-medium rounded-md hover:bg-royal/90 transition-colors">
-              Sign In
-            </button>
-            <button (click)="navigateToLogin()"
-              class="w-full px-3 py-2 border border-royal text-royal text-xs font-medium rounded-md hover:bg-royal/5 transition-colors">
-              Sign Up
-            </button>
+        <div class="relative overflow-hidden p-4 rounded-xl bg-gradient-to-br from-deepred/5 via-deepred/10 to-red-400/10 border border-deepred/20 backdrop-blur-sm">
+          <!-- Decorative elements -->
+          <div class="absolute -top-6 -right-6 w-16 h-16 bg-deepred/20 rounded-full blur-xl"></div>
+          <div class="absolute -bottom-4 -left-4 w-12 h-12 bg-red-400/20 rounded-full blur-lg"></div>
+
+          <!-- Content -->
+          <div class="relative z-10">
+            <div class="flex items-center justify-center mb-3">
+              <div class="p-2 rounded-full bg-deepred/10 ring-2 ring-deepred/20">
+                <lucide-icon [img]="SparklesIcon" class="w-4 h-4 text-deepred"></lucide-icon>
+              </div>
+            </div>
+
+            <h4 class="text-sm font-semibold text-center text-foreground mb-1">Unlock Full Access</h4>
+            <p class="text-xs text-muted-foreground text-center mb-4">Sign in to save chats, access history & more</p>
+
+            <div class="space-y-2">
+              <button (click)="navigateToLogin()"
+                class="group w-full px-4 py-2.5 bg-gradient-to-r from-deepred to-deepred/80 text-white text-xs font-semibold rounded-lg hover:shadow-lg hover:shadow-deepred/25 hover:-translate-y-0.5 transition-all duration-200 flex items-center justify-center gap-2">
+                <lucide-icon [img]="LogInIcon" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></lucide-icon>
+                Sign In
+              </button>
+              <button (click)="navigateToLogin()"
+                class="group w-full px-4 py-2.5 bg-white/50 dark:bg-white/5 border border-deepred/30 text-deepred text-xs font-semibold rounded-lg hover:bg-deepred/5 hover:border-deepred/50 transition-all duration-200 flex items-center justify-center gap-2">
+                <lucide-icon [img]="UserPlusIcon" class="w-3.5 h-3.5 group-hover:scale-110 transition-transform"></lucide-icon>
+                Create Account
+              </button>
+            </div>
           </div>
         </div>
       </div>
