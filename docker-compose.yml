@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: legal-advice-chatbot
+    ports:
+      - "80:80"
+    restart: unless-stopped
+    # Uncomment below for SSL with reverse proxy
+    # environment:
+    #   - VIRTUAL_HOST=yourdomain.com
+    #   - LETSENCRYPT_HOST=yourdomain.com
