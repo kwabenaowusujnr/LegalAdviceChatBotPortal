@@ -624,10 +624,44 @@ dig nsembot.com
 |-------|-------|----------|
 | Site shows "Welcome to nginx!" | Host Nginx default page | Ensure site config is enabled and default is removed |
 | Container not found | Container wasn't started | Pull and run the container manually |
-| 502 Bad Gateway | Backend container not running | Check `docker ps` and restart container |
+| 502 Bad Gateway | Frontend container not running or wrong port | Check `docker ps` and ensure container is on port 3000 (see below) |
 | SSL certificate error | Certificate expired or not installed | Run `certbot --nginx -d nsembot.com` |
 | GitHub Actions failing | Missing secrets | Verify all secrets are configured correctly |
 | DNS not resolving | DNS not configured | Add A record at domain registrar |
+
+#### 502 Bad Gateway - Port Mismatch Fix
+
+The most common cause of 502 errors after deployment is a **port mismatch**. The Nginx reverse proxy expects the frontend container on **port 3000**, not port 80.
+
+**Wrong configuration:**
+```bash
+docker run -d -p 80:80 ...  # ❌ Conflicts with host Nginx
+```
+
+**Correct configuration:**
+```bash
+docker run -d -p 3000:80 ...  # ✅ Nginx proxies to port 3000
+```
+
+**To fix manually:**
+```bash
+# Stop and remove the misconfigured container
+docker stop legal-advice-chatbot
+docker rm legal-advice-chatbot
+
+# Run with correct port mapping
+docker run -d \
+  --name legal-advice-chatbot \
+  --restart unless-stopped \
+  -p 3000:80 \
+  ghcr.io/kwabenaowusujnr/legaladvicechatbotportal:latest
+
+# Verify it's running on the correct port
+docker ps
+ss -tlnp | grep 3000
+```
+
+**Important:** Ensure your GitHub Actions workflow uses `-p 3000:80` in the `docker run` command.
 
 ### Monitoring
 
@@ -663,8 +697,9 @@ Consider setting up:
 
 | Date | Version | Changes |
 |------|---------|---------|
+| 2026-02-03 | 1.0.1 | Fixed port mapping issue (80 → 3000) causing 502 errors |
 | 2026-02-03 | 1.0.0 | Initial Docker deployment setup |
 
 ---
 
-*Documentation generated: February 3, 2026*
+*Documentation updated: February 3, 2026*

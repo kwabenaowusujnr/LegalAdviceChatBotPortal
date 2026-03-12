@@ -1403,12 +1403,14 @@ export class ChatMessageInputDto {
     sessionId?: string | undefined;
     message?: string | undefined;
     documentContext?: string | undefined;
+    language?: string | undefined;
 
     init(_data?: any) {
         if (_data) {
             this.sessionId = _data["sessionId"];
             this.message = _data["message"];
             this.documentContext = _data["documentContext"];
+            this.language = _data["language"];
         }
     }
 
@@ -1424,6 +1426,7 @@ export class ChatMessageInputDto {
         data["sessionId"] = this.sessionId;
         data["message"] = this.message;
         data["documentContext"] = this.documentContext;
+        data["language"] = this.language;
         return data;
     }
 }

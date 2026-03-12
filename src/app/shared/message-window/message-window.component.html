@@ -38,7 +38,26 @@
       </div>
 
       <!-- Message content with improved typography -->
-      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="message.isFromUser ? formatMessageContent(message.message || '') : formatMessageContent(message.response || '')"></div>
+      <div class="text-sm leading-relaxed whitespace-pre-line" [innerHTML]="formatMessageContent(getDisplayContent())"></div>
+
+      <!-- Translate to English button for bot messages when language is not English -->
+      <button
+        *ngIf="shouldShowTranslateButton()"
+        (click)="toggleEnglishTranslation()"
+        [disabled]="isTranslating"
+        class="flex items-center gap-1.5 mt-2 px-2 py-1 text-xs font-medium text-gray-500 hover:text-forest hover:bg-gray-50 rounded-md transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+        <svg *ngIf="!isTranslating" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path>
+        </svg>
+        <svg *ngIf="isTranslating" class="w-3.5 h-3.5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        <span *ngIf="isTranslating">Translating...</span>
+        <span *ngIf="!isTranslating">
+          {{ showingEnglish ? 'Show in ' + getLanguageName() : 'Show in English' }}
+        </span>
+      </button>
       </div>
     </div>
 

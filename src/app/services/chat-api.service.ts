@@ -53,7 +53,7 @@ export class ChatApiService {
   }
 
 
-  public sendMessage(message: string, documentContext?: string, sessionId?: string): Observable<ChatMessage> {
+  public sendMessage(message: string, documentContext?: string, sessionId?: string, language: string = 'en'): Observable<ChatMessage> {
     if (!this.currentSessionId) {
       this.initializeSession()
     }
@@ -62,6 +62,7 @@ export class ChatApiService {
     chatInput.sessionId = sessionId || this.currentSessionId!;
     chatInput.message = message;
     chatInput.documentContext = documentContext;
+    chatInput.language = language;
 
 
     console.log(" Sending chat message:", chatInput);

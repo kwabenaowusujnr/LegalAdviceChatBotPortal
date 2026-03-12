@@ -2,6 +2,8 @@ import { AnalyticsService } from 'src/app/services/analytics.service';
 import { ChatApiService } from './../../services/chat-api.service';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild, ElementRef, AfterViewChecked, HostListener } from '@angular/core';
+import { catchError, finalize } from 'rxjs/operators';
+import { of } from 'rxjs';
 import {
   BookOpen,
   ChevronDown,
@@ -26,6 +28,7 @@ import { TypingIndicatorComponent } from 'src/app/shared/chats-components/typing
 import { SignupPromptModalComponent } from 'src/app/shared/signup-prompt-modal/signup-prompt-modal.component';
 import { HelpSupportModalComponent } from 'src/app/shared/help-support-modal/help-support-modal.component';
 import { LoadingService } from 'src/app/services/loading.service';
+import { LanguageSelectorComponent } from 'src/app/shared/language-selector/language-selector.component';
 
 interface ConstitutionalDocument {
   id: string;
@@ -53,7 +56,8 @@ interface LegalSuggestion {
     UserMenuComponent,
     TypingIndicatorComponent,
     SignupPromptModalComponent,
-    HelpSupportModalComponent
+    HelpSupportModalComponent,
+    LanguageSelectorComponent
   ],
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
@@ -68,6 +72,9 @@ export class ChatComponent implements AfterViewChecked {
   showSignupPrompt = false
   showHelpModal = false
   readonly ANONYMOUS_MESSAGE_LIMIT = 3
+
+  // Language support
+  selectedLanguage: string = 'en'
 
   @ViewChild(SidebarV2Component) sidebarComponent!: SidebarV2Component;
   @ViewChild('messagesContainer', { static: false }) messagesContainer!: ElementRef;
@@ -170,6 +177,9 @@ export class ChatComponent implements AfterViewChecked {
 
   messages: ChatMessage[] = [];
 
+  // Supported languages for validation
+  private readonly supportedLanguageCodes = ['en', 'ak', 'gaa', 'ee', 'ha', 'dag'];
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -181,6 +191,20 @@ export class ChatComponent implements AfterViewChecked {
   ) {
     this.selectedDocument = this.constitutionalDocuments[0];
     this.showUserMenu = this.authService.isAuthenticated();
+    // Load saved language preference
+    const savedLang = localStorage.getItem('preferredLanguage');
+    if (savedLang && this.supportedLanguageCodes.includes(savedLang)) {
+      this.selectedLanguage = savedLang;
+    }
+  }
+
+  onLanguageChange(langCode: string): void {
+    this.selectedLanguage = langCode;
+    this.analyticsService.trackEvent(
+      'language_change',
+      `Changed language to ${langCode}`,
+      'settings'
+    );
   }
 
   onSendMessage(message: string): void {
@@ -194,6 +218,7 @@ export class ChatComponent implements AfterViewChecked {
       this.anonymousMessageCount++;
     }
 
+    // Show user message in original language immediately
     const userMessage = new ChatMessage();
     userMessage.id = Date.now();
     userMessage.message = message;
@@ -203,54 +228,62 @@ export class ChatComponent implements AfterViewChecked {
     this.messages.push(userMessage);
 
     this.isLoading = true;
-    console.log('Sending message via API:', message);
+    console.log('Sending message via API:', message, 'Language:', this.selectedLanguage);
 
-    let sessionId= undefined;
+    let sessionId = undefined;
     if(this.messages.length > 0){
       sessionId = this.messages[0].sessionId;
     }
 
-    this.chatApiService.sendMessage(message, this.selectedDocument?.id , sessionId).subscribe({
-      next: (response) => {
-        const botMessage = new ChatMessage();
+    // Send message with language code - backend handles translation
+    this.chatApiService.sendMessage(message, this.selectedDocument?.id, sessionId, this.selectedLanguage)
+      .pipe(
+        catchError(error => {
+          console.error('Error sending message:', error);
+          const errorResponse = new ChatMessage();
+          errorResponse.message = "Sorry, I'm having trouble responding right now. Please try again.";
+          errorResponse.createdAt = new Date();
+          return of(errorResponse);
+        }),
+        finalize(() => {
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          const botMessage = new ChatMessage();
 
-        botMessage.id = Number.parseInt(String(response.id)) || Date.now() + 1;
-        botMessage.response = response.message
-          ? response.message
-          : 'No response';
-        botMessage.isFromUser = false;
-        botMessage.createdAt = response.createdAt
-          ? new Date(response.createdAt)
-          : new Date();
+          botMessage.id = Number.parseInt(String(response.id)) || Date.now() + 1;
+          botMessage.response = response.message
+            ? response.message
+            : 'No response';
+          botMessage.isFromUser = false;
+          botMessage.createdAt = response.createdAt
+            ? new Date(response.createdAt)
+            : new Date();
 
-        this.messages.push(botMessage);
-        this.isLoading = false;
+          this.messages.push(botMessage);
 
-        if (this.sidebarComponent) {
-          this.sidebarComponent.refreshChatHistory();
+          if (this.sidebarComponent) {
+            this.sidebarComponent.refreshChatHistory();
+          }
+
+          if (!this.authService.isAuthenticated() && this.anonymousMessageCount < this.ANONYMOUS_MESSAGE_LIMIT - 1){
+            this.toastService.info("You have 1 message remaining. Sign up for unlimited access!")
+          }
+        },
+        error: (error) => {
+          console.error('Error sending message:', error);
+
+          const errorMessage = new ChatMessage();
+          errorMessage.id = Date.now() + 1;
+          errorMessage.response =
+            "Sorry, I'm having trouble responding right now. Please try again.";
+          errorMessage.isFromUser = false;
+          errorMessage.createdAt = new Date();
+          this.messages.push(errorMessage);
         }
-
-        // if (this.messages.filter((m) => m.isFromUser === false).length === 1) {
-        //   this.toastService.success("Connected to NsemBot! Ask me anything about legal matters.")
-        // }
-
-        if (!this.authService.isAuthenticated() && this.anonymousMessageCount < this.ANONYMOUS_MESSAGE_LIMIT - 1){
-          this.toastService.info("You have 1 message remaining. Sign up for unlimited access!")
-        }
-      },
-      error: (error) => {
-        console.error('Error sending message:', error);
-        this.isLoading = false;
-
-        const errorMessage = new ChatMessage();
-        errorMessage.id = Date.now() + 1;
-        errorMessage.response =
-          "Sorry, I'm having trouble responding right now. Please try again.";
-        errorMessage.isFromUser = false;
-        errorMessage.createdAt = new Date();
-        this.messages.push(errorMessage);
-      },
-    });
+      });
 
     /*
     const newMessage: Message = {
