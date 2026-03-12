@@ -5,5 +5,5 @@ export const environment = {
 
   // Replace with your Google Cloud Translation API key
   // Get one from: https://console.cloud.google.com/apis/credentials
-  googleTranslateApiKey: 'AIzaSyAc86H2jm0wwD0dR8WgCkoIf9lWOq5mPp8'
+  //googleTranslateApiKey: ''
 };
