@@ -28,6 +28,8 @@ export class SpeechRecognitionService {
   private recognition: any = null;
   private isListening = false;
   private shouldRestart = false;
+  private lastResultIndex = 0;
+  private processedResults = new Set<string>();
 
   // Observables for component subscription
   private transcriptSubject = new BehaviorSubject<string>('');
@@ -83,34 +85,50 @@ export class SpeechRecognitionService {
     this.recognition.onresult = (event: any) => {
       console.log('Speech recognition result event:', event);
       let interimTranscript = '';
-      let finalTranscript = '';
+      let newFinalTranscripts: string[] = [];
 
-      // Process all results
-      for (let i = event.resultIndex; i < event.results.length; i++) {
+      // Only process new results, starting from lastResultIndex
+      const startIndex = Math.max(event.resultIndex, this.lastResultIndex);
+
+      for (let i = startIndex; i < event.results.length; i++) {
         const result = event.results[i];
-        const transcript = result[0].transcript;
+        const transcript = result[0].transcript.trim();
+
+        if (!transcript) continue; // Skip empty transcripts
+
         console.log(`Result ${i}: "${transcript}" (final: ${result.isFinal})`);
 
         if (result.isFinal) {
-          finalTranscript += transcript;
+          // Create a unique key for this result to prevent duplicates
+          const resultKey = `${i}-${transcript}`;
+
+          if (!this.processedResults.has(resultKey)) {
+            newFinalTranscripts.push(transcript);
+            this.processedResults.add(resultKey);
+            this.lastResultIndex = i + 1;
+          }
         } else {
-          interimTranscript += transcript;
+          interimTranscript += transcript + ' ';
         }
       }
 
       // Update observables
-      if (interimTranscript) {
-        console.log('Interim transcript:', interimTranscript);
-        this.interimTranscriptSubject.next(interimTranscript);
+      if (interimTranscript.trim()) {
+        console.log('Interim transcript:', interimTranscript.trim());
+        this.interimTranscriptSubject.next(interimTranscript.trim());
         this.stateSubject.next(RecognitionState.PROCESSING);
       }
 
-      if (finalTranscript) {
-        const currentTranscript = this.transcriptSubject.value;
-        const newTranscript = currentTranscript ? currentTranscript + ' ' + finalTranscript : finalTranscript;
-        console.log('Final transcript:', finalTranscript);
-        console.log('Updated full transcript:', newTranscript);
-        this.transcriptSubject.next(newTranscript);
+      if (newFinalTranscripts.length > 0) {
+        const newTranscriptPart = newFinalTranscripts.join(' ').trim();
+        const currentTranscript = this.transcriptSubject.value.trim();
+        const updatedTranscript = currentTranscript ?
+          `${currentTranscript} ${newTranscriptPart}` : newTranscriptPart;
+
+        console.log('New final transcript part:', newTranscriptPart);
+        console.log('Updated full transcript:', updatedTranscript);
+
+        this.transcriptSubject.next(updatedTranscript);
         this.interimTranscriptSubject.next('');
         this.stateSubject.next(RecognitionState.RECORDING);
       }
@@ -120,6 +138,9 @@ export class SpeechRecognitionService {
     this.recognition.onstart = () => {
       this.isListening = true;
       this.shouldRestart = true;
+      // Reset tracking variables for new session
+      this.lastResultIndex = 0;
+      this.processedResults.clear();
       this.stateSubject.next(RecognitionState.RECORDING);
       this.errorSubject.next('');
       console.log('Speech recognition started');
@@ -214,9 +235,11 @@ export class SpeechRecognitionService {
         return;
       }
 
-      // Clear previous transcripts
+      // Clear previous transcripts and reset tracking
       this.transcriptSubject.next('');
       this.interimTranscriptSubject.next('');
+      this.lastResultIndex = 0;
+      this.processedResults.clear();
       this.shouldRestart = true;
 
       try {
@@ -271,6 +294,8 @@ export class SpeechRecognitionService {
   public clearTranscript(): void {
     this.transcriptSubject.next('');
     this.interimTranscriptSubject.next('');
+    this.lastResultIndex = 0;
+    this.processedResults.clear();
   }
 
   /**
