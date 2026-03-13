@@ -74,7 +74,7 @@ export class ChatApiService {
         this.toastService.error("Failed to send message. Please try again.")
 
         const chatMsg = new ChatMessage();
-        chatMsg.message = "Sorry, I'm having trouble responding right now. Please try again.";
+        chatMsg.response = "Sorry, I'm having trouble responding right now. Please try again.";
         chatMsg.createdAt = new Date();
         return of(chatMsg);
       }),
@@ -95,14 +95,14 @@ export class ChatApiService {
 
         if (latestBotMessage && latestBotMessage.response) {
           const chatMsg = new ChatMessage();
-          chatMsg.message = latestBotMessage.response;
+          chatMsg.response = latestBotMessage.response;
           chatMsg.id = latestBotMessage.id || 0;
           chatMsg.createdAt = latestBotMessage.createdAt || new Date();
 
           return chatMsg;
         } else {
           const chatMsg = new ChatMessage();
-          chatMsg.message = "I received your message. How can I help you further?";
+          chatMsg.response = "I received your message. How can I help you further?";
           chatMsg.createdAt = new Date();
 
           return chatMsg;
@@ -111,7 +111,7 @@ export class ChatApiService {
       }),
       catchError((error) => {
         const chatMsg = new ChatMessage();
-        chatMsg.message = "Sorry, I'm having trouble responding right now. Please try again.";
+        chatMsg.response = "Sorry, I'm having trouble responding right now. Please try again.";
         chatMsg.id = 0;
         chatMsg.createdAt = new Date();
         chatMsg.init?.();

@@ -254,8 +254,8 @@ export class ChatComponent implements AfterViewChecked {
           const botMessage = new ChatMessage();
 
           botMessage.id = Number.parseInt(String(response.id)) || Date.now() + 1;
-          botMessage.response = response.message
-            ? response.message
+          botMessage.response = response.response
+            ? response.response
             : 'No response';
           botMessage.isFromUser = false;
           botMessage.createdAt = response.createdAt
